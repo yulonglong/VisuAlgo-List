@@ -63,3 +63,9 @@ finished linked list perfectly
 8 june 2014 5.00 pm
 
 finished queue and stack
+
+
+17 June 2014 3pm
+
+fixed search animation
+fixed remove tail animation
