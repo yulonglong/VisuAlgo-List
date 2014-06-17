@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<title>VisuAlgo - Linked List</title>
+<link rel="icon" type="image/png" href="img/favicon.png" />
+
+<!--css-->
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/viz.css">
+
+<link rel="stylesheet" href="css/list.css">
+
+<!--js-->
+<script src="js/external/jquery-1.10.2.js"></script>
+<script src="js/external/jquery-ui.js"></script>
+<script src="js/external/d3.v3.js"></script>
+<script src="js/viz.js"></script>
+<script src="js/common.js"></script>
+<script src="js/actions/list_actions.js"></script>
+<!--script src="//connect.facebook.net/en_US/all.js"></script-->
+<!-- more scripts are below-->
+
+<!--fonts-->
+<link href="fonts/silkscreen/stylesheet.css" rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+<div id="top-bar">
+	<a id="home" href="index.html">Visu<span class="colour">Algo</span></a>
+    <span id="title">
+    	<a id="title-LL" class="selected-viz">Linked List</a>
+        <a id="title-Stack">Stack</a>
+        <a id="title-Queue">Queue</a>
+        <a id="title-DLL">Doubly Linked List</a>
+        <a id="title-Deque">Deque</a>
+    </span>
+    <!--a id="fb-login" href="#" target="_blank">Facebook connect</a>
+    <span id="trick">
+		<fb:login-button show-faces="false" width="200" max-rows="1" style="float: right; margin-top: 9px;"></fb:login-button>
+    </span-->
+    <div id="mode-menu">
+    	<div id="mode-button">Exploration Mode<img src="img/arrow_white.png"/></div>
+        <div id="other-modes">
+            <a href="#">Tutorial Mode</a>
+        </div>
+    </div>
+</div>
+    
+    <div id="viz"></div>
+    
+    <div id="current-action" class="panel"><p></p></div>
+    
+    <div id="actions" class="panel">
+    	<p id="create">Create</p>
+        <p id="search">Search</p>
+		<p id="insert">Insert</p>
+		<p id="remove">Remove</p>
+		<!-- <p id="successor">Successor</p>
+		<p id="predecessor">Predecessor</p>
+        <p id="inorder" class="execAction" onclick=inorderTraversal()>In-order Traversal</p> -->
+    </div>
+    <div id="actions-hide" class="panel-hide"><img src="img/arrow_white_right.png" title="show/hide actions panel"/></div>
+    <div id="actions-extras">
+    <!--put all the extra action pullouts (input) and error messages here-->
+    	<div class="create action-menu-pullout">
+    		<div id="create-random" class="execAction new-menu-option coloured-menu-option" onClick=random()><p>Random</p></div>
+    		<div id="create-random-sorted" class="execAction new-menu-option coloured-menu-option" onClick=randomLL()><p>Random Sorted</p></div>
+    		<div id="create-input" class="new-menu-option"><input type="text" id="v-create-size" title="Enter the size of the linked list" autocomplete="off" value=3 /></div>
+    		<div id="create-random-fixed-size" class="execAction new-menu-option coloured-menu-option" onClick=randomFixedSize()><p>Random Fixed Size</p></div>
+    		<div id="create-input-arr" class="new-menu-option"><input type="text" id="v-create-arr" title="Enter the elements separated by comma" autocomplete="off" value="1,2,3" /></div>
+    		<div id="create-from-arr" class="execAction new-menu-option coloured-menu-option" onClick=nonRandom()><p>User Defined</p></div>
+    		<div id="create-err" class="err"></div>
+    	</div>
+
+    	<div class="search action-menu-pullout">
+            <div id="search-input" class="new-menu-option"><input type="text" id="v-search" title="Enter an integer" autocomplete="off" value=5 /></div>
+            <div id="search-go" class="execAction coloured-menu-option" onclick=searchVertex()><p>GO</p></div>
+            <div id="search-err" class="err"></div>
+        </div>
+        
+        <div class="insert action-menu-pullout">
+            <div id="insert-input" class="new-menu-option"><input type="text" id="v-insert" title="Enter an integer or comma-separated array of integers" autocomplete="off" value=20 /></div>
+ 			<div id="insert-head" class="execAction new-menu-option coloured-menu-option" onClick=insertHead()><p>Insert to Head</p></div>
+            <div id="insert-tail" class="execAction new-menu-option coloured-menu-option" onClick=insertTail()><p>Insert to Tail</p></div>
+            <div id="insert-input-kth" class="new-menu-option"><input type="text" id="v-insert-kth" title="Enter the index to be inserted" autocomplete="off" value=0 /></div>
+            <div id="insert-kth" class="execAction new-menu-option coloured-menu-option" onClick=insertKth()><p>Insert to k-th</p></div>
+            <div id="insert-err" class="err"></div>
+        </div>
+        
+        <div class="remove action-menu-pullout">
+       		<div id="remove-head" class="execAction new-menu-option coloured-menu-option" onClick=removeHead()><p>Remove Head</p></div>
+            <div id="remove-tail" class="execAction new-menu-option coloured-menu-option" onClick=removeTail()><p>Remove Tail</p></div>
+            <div id="remove-input-kth" class="new-menu-option"><input type="text" id="v-remove-kth" title="Enter the index to be removed" autocomplete="off" value=0 /></div>
+            <div id="remove-kth" class="execAction new-menu-option coloured-menu-option" onClick=removeKth()><p>remove k-th</p></div>
+        	<div id="remove-err" class="err"></div>
+        </div>
+       <!--  
+        <div class="successor action-menu-pullout">
+            <div id="succ-input" class="new-menu-option"><input type="text" id="v-succ" title="Enter an integer" autocomplete="off" value=15 /></div>
+            <div id="succ-go" class="execAction coloured-menu-option" onclick=successor()><p>GO</p></div>
+            <div id="succ-err" class="err"></div>
+        </div>
+
+        <div class="predecessor action-menu-pullout">
+            <div id="pred-input" class="new-menu-option"><input type="text" id="v-pred" title="Enter an integer" autocomplete="off" value=15 /></div>
+            <div id="pred-go" class="execAction coloured-menu-option" onclick=predecessor()><p>GO</p></div>
+            <div id="pred-err" class="err"></div>
+        </div> -->
+
+        <div class="inorder action-menu-pullout">
+        	<div id="inorder-err" class="err"></div>
+        </div>
+    </div>
+    
+    <div id="status" class="panel"><p></p></div>
+    <div id="status-hide" class="panel-hide"><img src="img/arrow_white_right.png" title="show/hide status panel"/></div>
+    
+    <div id="codetrace" class="panel">
+    	<!--can add class "highlighed" to hightlight one line-->
+    	<p id="code1" style="padding-top: 10px;"></p>
+        <p id="code2"></p>
+        <p id="code3"></p>
+		<p id="code4"></p>
+		<p id="code5"></p>
+		<p id="code6"></p>
+		<p id="code7" style="padding-bottom: 10px;"></p>
+    </div>
+    <div id="codetrace-hide" class="panel-hide"><img src="img/arrow_white_right.png" title="show/hide codetrace panel"/></div>
+    
+<div id="left-bar"></div>
+<div id="right-bar"></div>
+<!-- Bottom bar and overlay popups -->
+<div id="bottom-bar">
+	<a id="trigger-about">About</a>
+    <a id="trigger-team">Team</a>
+    <a id="trigger-terms">Terms of use</a>
+</div>
+
+<div id="media-controls">
+	<div id="speed-control">slow<div id="speed-input"></div>fast</div>
+	<span id="go-to-beginning" class="media-control-button" title="go to beginning" onclick=goToBeginning()><img src="img/goToBeginning.png" alt="go to beginning" /></span>
+	<span id="previous" class="media-control-button" title="step backward" onclick=stepBackward()><img src="img/prevFrame.png" alt="previous frame" /></span>
+    <span id="pause" class="media-control-button" title="pause" onclick=pause()><img src="img/pause.png" alt="pause" /></span>
+    <span id="play" class="media-control-button" title="play" onclick=play()><img src="img/play.png" alt="play" /></span>
+    <span id="next" class="media-control-button" title="step forward" onclick=stepForward()><img src="img/nextFrame.png" alt="next frame" /></span>
+    <span id="go-to-end" class="media-control-button" title="go to end" onclick=goToEnd()><img src="img/goToEnd.png" alt="go to end"/></span>
+    <div id="progress-bar" class="media-control-button"></div>
+</div>
+
+<div id="dark-overlay"></div>
+<div id="about" class="overlays"></div>
+<div id="team" class="overlays"></div>
+<div id="termsofuse" class="overlays"></div>
+
+<!--tutorial dialogs here-->
+<div id="list-tutorial-1" class="tutorial-dialog">
+	 a linked list is a data structure consisting of a group of nodes which together represent a sequence. Under the simplest form, each node is composed of a data and a reference (in other words, a link) to the next node in the sequence
+    <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
+</div>
+<div id="list-tutorial-2" class="tutorial-dialog">
+	To toggle between the Linked List, Stack and Queue, select the respective header.
+    <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
+</div>
+<div id="list-tutorial-3" class="tutorial-dialog">
+	All available operations on the Linked List will be shown here. Select an action and provide the necessary input, and the action will be animated in the visualisation area.
+    <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
+</div>
+<div id="list-tutorial-4" class="tutorial-dialog">
+	View the visualisation here!
+    <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
+</div>
+<div id="list-tutorial-5" class="tutorial-dialog">
+	As the action is being carried out, each step will be described in the status panel.
+    <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
+</div>
+<div id="list-tutorial-6" class="tutorial-dialog">
+	You can also follow the psuedocode highlights to trace the algorithm.
+    <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
+</div>
+<div id="list-tutorial-7" class="tutorial-dialog">
+	Control the animation with the player controls! Keyboard shortcuts are:<br/>
+    <div style="margin-top: 8px;"><strong>Spacebar:</strong> play/pause/replay</div>
+    <strong>Left/right arrows:</strong> step backward/step forward<br/>
+    <strong>-/+:</strong> decrease/increase speed<br/>
+    <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
+</div>
+<div id="list-tutorial-8" class="tutorial-dialog">
+	Return to "Exploration Mode" to start exploring!
+</div>
+
+<script src="js/graph_library/constant.js"></script>
+<script src="js/graph_library/properties.js"></script>
+<script src="js/graph_library/helperObjects.js"></script>
+<script src="js/graph_library/misc.js"></script>
+<script src="js/graph_library/Widget.js"></script>
+<script src="js/graph_library/GraphWidget.js"></script>
+<script src="js/graph_library/GraphVertexWidget.js"></script>
+<script src="js/graph_library/GraphEdgeWidget.js"></script>
+<script src="js/widgets/ListWidget.js"></script>
+
+<script type="text/javascript">
+	$('#play').hide();
+
+	//this viz-specific code
+	var bstWidget = new BST();
+    var gw = bstWidget.getGraphWidget();
+	
+	//title changing
+	$('#title-LL').click(function() {
+		if(isPlaying) {	stop(); }
+		showActionsPanel();
+		hideStatusPanel();
+		hideCodetracePanel();
+		window.location.href = "list.html"
+		// bstWidget.isAVL(false);
+	});
+	$('#title-Stack').click(function() {
+		if(isPlaying) {	stop(); }
+		showActionsPanel();
+		hideStatusPanel();
+		hideCodetracePanel();
+		window.location.href = "stack.html";
+		// bstWidget.isAVL(true);
+	});
+	$('#title-Queue').click(function() {
+		if(isPlaying) {	stop(); }
+		showActionsPanel();
+		hideStatusPanel();
+		hideCodetracePanel();
+		window.location.href = "queue.html";
+		// bstWidget.isAVL(true);
+	});
+	$('#title-DLL').click(function() {
+		if(isPlaying) {	stop(); }
+		showActionsPanel();
+		hideStatusPanel();
+		hideCodetracePanel();
+		window.location.href = "doublylinkedlist.html"
+		// bstWidget.isAVL(false);
+	});
+	$('#title-Deque').click(function() {
+		if(isPlaying) {	stop(); }
+		showActionsPanel();
+		hideStatusPanel();
+		hideCodetracePanel();
+		window.location.href = "deque.html";
+		// bstWidget.isAVL(true);
+	});
+
+	function random() {
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			if((mode=="exploration")&&bstWidget.generateRandom()) {
+				 $('#progress-bar').slider( "option", "max", 0);
+				closeCreate();
+				isPlaying = false;
+			}
+		}, 500)
+		hideStatusPanel();
+		hideCodetracePanel();
+	}
+
+	function randomLL() {
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			if((mode=="exploration")&&bstWidget.generateRandomSorted()) {
+				 $('#progress-bar').slider( "option", "max", 0);
+				closeCreate();
+				isPlaying = false;
+			}
+		}, 500)
+		hideStatusPanel();
+		hideCodetracePanel();
+	}
+
+	function randomFixedSize(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-create-size').val();
+			input = parseInt(input);
+			if((mode=="exploration")&&bstWidget.generateRandomFixedSize(input)) {
+				 $('#progress-bar').slider( "option", "max", 0);
+				closeCreate();
+				isPlaying = false;
+			}
+		}, 500)
+		hideStatusPanel();
+		hideCodetracePanel();
+	}
+
+	function nonRandom(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-create-arr').val();
+			input = input.split(",");
+			if((mode=="exploration")&&bstWidget.generateUserDefined(input)) {
+				 $('#progress-bar').slider( "option", "max", 0);
+				closeCreate();
+				isPlaying = false;
+			}
+		}, 500)
+		hideStatusPanel();
+		hideCodetracePanel();
+	}
+
+    function searchVertex(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-search').val();
+			input = parseInt(input);
+			if((mode=="exploration")&&bstWidget.search(input)) {
+				$('#current-action').show();
+				$('#current-action p').html("Search for "+ input);
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500)
+    }
+
+    //stub functions for the things i created
+
+ 	function insertHead(){
+ 		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-insert').val();
+			input = input.split(",");
+			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
+				$('#current-action').show();
+				$('#current-action p').html("Insert "+ input);
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}	
+		}, 500)
+    }
+
+    function insertTail(){
+    	if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-insert').val();
+			input = input.split(",");
+			if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
+				$('#current-action').show();
+				$('#current-action p').html("Insert "+ input);
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500)
+    }
+
+    function insertKth(){
+    	if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-insert').val();
+			var index = $('#v-insert-kth').val();
+			input = input.split(",");
+			if((mode=="exploration")&&bstWidget.insertArrKth(input,index)) {
+				$('#current-action').show();
+				$('#current-action p').html("Insert "+ input);
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500)
+    }
+
+
+
+//another stub function created by me
+	function removeHead(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			if((mode=="exploration")&&bstWidget.removeArrHead()) {
+				$('#current-action').show();
+				$('#current-action p').html("Remove head");
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500);
+    }
+
+
+
+    function removeTail(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			if((mode=="exploration")&&bstWidget.removeArrTail()) {
+				$('#current-action').show();
+				$('#current-action p').html("Remove Tail");
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500);
+    }
+
+	function removeKth(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-remove-kth').val();
+			input = input.split(",");
+			if((mode=="exploration")&&bstWidget.removeArrKth(input)) {
+				$('#current-action').show();
+				$('#current-action p').html("Remove "+ input);
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500);
+    }
+
+	
+	//playback controls might fit better in viz.js, but put here in case some viz does not use GraphWidgetNew.js
+	var isPaused = false;
+	function isAtEnd() {
+		return (gw.getCurrentIteration()==(gw.getTotalIteration()-1));
+	}
+	
+	function pause() {
+		if(isPlaying) {
+			isPaused = true;
+			gw.pause();
+			$('#play').show();
+			$('#pause').hide();
+		}
+	}
+	function play() {
+		if(isPlaying) {
+			isPaused = false;
+			$('#pause').show();
+			$('#play').hide();
+			if(isAtEnd()) {
+				gw.replay();
+			} else {
+				gw.play();
+			}
+		}
+	}
+	function stepForward() {
+		if(isPlaying) {
+			pause();
+			gw.forceNext(250);
+		}
+	}
+	function stepBackward() {
+		if(isPlaying) {
+			pause();
+			gw.forcePrevious(250);	
+		}
+	}
+	function goToBeginning() {
+		if(isPlaying) {
+			gw.jumpToIteration(0,0);
+			pause();
+		}
+	}
+	function goToEnd() {
+		if(isPlaying) {
+			gw.jumpToIteration(gw.getTotalIteration()-1,0);
+			pause();
+		}
+	}
+	function stop() {
+		gw.stop();
+		isPaused = false;
+		isPlaying = false;
+		$('#pause').show();
+		$('#play').hide();
+		$('#current-action').hide();
+	}
+	
+	//shortcut keys for playback controls
+	$(document).keydown( function(event) {
+		if(event.which == 32) { //spacebar
+			if(isPaused) { play(); } else { pause(); }
+		} else if(event.which == 37) { //left arrow
+			stepBackward();
+		} else if(event.which == 39) { //right arrow
+			stepForward();
+		} else if(event.which == 35) { //end
+			stop();
+		} else if (event.which == 189) { //minus
+			var d = (2200-gw.getAnimationDuration())-100;
+			if(d > 0) {
+				$("#speed-input").slider("value", d);
+			} else {
+				$("#speed-input").slider("value", 0);
+			}
+		} else if (event.which == 187) { //plus
+			var d = (2200-gw.getAnimationDuration())+100;
+			if(d <= 2000) {
+				$("#speed-input").slider("value", d);
+			} else {
+				$("#speed-input").slider("value", 2000);
+			}
+		}
+	});
+	
+	//sliders
+	$("#speed-input").slider({
+		min: 200,
+		max: 2000,
+		value: 1700,
+		change: function(event, ui) {
+			gw.setAnimationDuration(2200-ui.value);
+		}
+	});
+	$("#progress-bar").slider({
+		range: "min",
+		min: 0,
+		value: 0,
+		slide: function(event, ui) {
+			gw.pause();
+			gw.jumpToIteration(ui.value,0);
+		},
+		stop: function(event, ui) {
+			if(!isPaused) { setTimeout( function(){gw.play();}, 500) }
+		}
+	});
+	
+</script>
+
+</body>
+</html>
