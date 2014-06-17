@@ -204,51 +204,68 @@ var BST = function(){
     var key;
     var index = 0;
 
+    //temp = head , index = 0
+    currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+    currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+    currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
     currentState["status"] = "The current Linked List";
     currentState["lineNo"] = 1;
     stateList.push(currentState);
+    //end
 
     while( currentVertex != null){
+      //while (temp.data != input)
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
       currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
-
       currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
-
       vertexTraversed[currentVertex] = true;
-
       currentState["status"] = "Comparing "+currentVertex+ " with "+vertexText + " (index = " + index + ")";
       currentState["lineNo"] = 2;
       stateList.push(currentState);
+      //end
 
       if(parseInt(vertexText) != parseInt(currentVertex)) {
+        //while (temp.data != input)
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
         currentState["status"] = currentVertex+" is not equal to "+vertexText;
         currentState["lineNo"] = 2;
         stateList.push(currentState);
+        //end
         
-        
+        //case when vertex is not found
         currentVertex = internalBst[currentVertex]["rightChild"];
         if(currentVertex == null) {
 
+          //temp = temp.next ,index++
           currentState = createState(internalBst, vertexTraversed, edgeTraversed);
           currentState["status"] = "So temp points to the next vertex";
           currentState["lineNo"] = 3;
           stateList.push(currentState);
+          //end
 
+          //if temp == null
           currentState = createState(internalBst, vertexTraversed, edgeTraversed);
           currentState["status"] = "temp is null";
           currentState["lineNo"] = 4;
           stateList.push(currentState);
+          //end
 
+          //return -1
           currentState = createState(internalBst, vertexTraversed, edgeTraversed);
           currentState["status"] = "Vertex "+vertexText+" is not in the Linked List";
           currentState["lineNo"] = 5;
           stateList.push(currentState);
+          //end
 
           break;
         }
 
+        //temp = temp.next ,index++
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
         var edgeHighlighted = internalBst[currentVertex]["vertexClassNumber"];
         edgeTraversed[edgeHighlighted] = true;
         currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
@@ -256,14 +273,16 @@ var BST = function(){
         currentState["status"] = "So temp points to the next vertex";
         currentState["lineNo"] = 3;
         stateList.push(currentState);
+        //end
 
+        //if temp==null
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
-        currentState["el"][edgeHighlighted]["state"] = EDGE_TRAVERSED;
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
         currentState["status"] = "temp is not null, continue searching";
         currentState["lineNo"] = 4;
         stateList.push(currentState);
-
+        //end
       
       }
       else{
@@ -272,17 +291,17 @@ var BST = function(){
       index++;
     }
 
+    //case when vertex is found
     if(currentVertex != null){
+      //return index
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
       currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
-
       currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
-
       currentState["status"] = "Found vertex " + vertexText + " return" + " (index = " + index + ")";
       currentState["lineNo"] = 6;
       stateList.push(currentState);
+      //end
     }
-    // End state
 
     currentState = createState(internalBst);
     currentState["status"] = "Search is complete";
