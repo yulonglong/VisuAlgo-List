@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+html { overflow-y: scroll; }
+
+body { background: #eeeeee; font-family: "PT Sans"; font-size: 13px; }
+
+#top-bar {
+	height: 40px;
+	padding: 0px 30px;
+	background: black;
+	color: white;
+}
+	/*left-side*/
+	#home {
+		font-family: 'SilkscreenNormal';
+		font-size: 20px;
+		padding-top: 10px;
+	}
+	#title {
+		padding-left: 20px;
+		text-transform: uppercase;
+		font-size: 16px;
+		color: #aaaaaa;
+	}
+		#title a { cursor: pointer; margin-right: 10px; }
+		#title .selected-viz { font-weight: bold; color: white; }
+		
+	/*right-side*/
+	#fb-login {
+		float: right;
+		background: #516eab;
+		padding: 11px 15px;
+		font-size: 14px;
+	}
+	.right-links {
+		float: right;
+		position: relative;
+		margin-left: 10px;
+		padding: 15px 15px;
+		color: white;
+		text-align: center;
+		font-size: 14px;
+		cursor: pointer;
+	}
+		/*#training-link { padding: 15px 15px 30px; }
+		#training-link:after {
+			content: " ";
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			height: 0px;
+			width: 0px;
+			border-bottom: 12px solid #eee;
+			border-right: 116px solid transparent;
+		}*/
+	
+#main { position: relative; padding: 30px 30px 10px 10px; overflow: auto; }
+	
+#bottom-bar {
+	padding: 12px 30px;
+	background: black;
+	color: white;
+	font-size: 14px;
+	text-align: right;
+}
+	#bottom-bar a { padding-left: 15px; cursor: pointer; }
+		#bottom-bar a:hover { text-decoration: underline; }
+	
+#dark-overlay {
+	display: none;
+	background: rgba(0,0,0,0.7);
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1002;
+}
+	.overlays {
+		display: none;
+		background: #eeeeee;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		z-index: 1003;
+	}
+	#about {
+		height: 470px;
+		width: 600px;
+		margin-left: -300px;
+		margin-top: -235px;
+	}
+	#team {
+		height: 460px;
+		width: 300px;
+		margin-left: -150px;
+		margin-top: -230px;
+	}
+	#termsofuse {
+		height: 180px;
+		width: 400px;
+		margin-left: -200px;
+		margin-top: -90px;
+	}
+		.overlays .close-overlay {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			cursor: pointer;
+		}
+		.overlays h4 {
+			color: white;
+			font-family: 'SilkscreenNormal';
+			font-size: 20px;
+			padding: 15px 20px;
+		}
+		.overlays .content { padding: 10px 20px 20px; }
+			.overlays p { padding-top: 10px; font-size: 14px; }
+			.overlays a { text-decoration: underline; }
+			
+@media (min-width: 320px) { /* 320-480px */
+
+}
+
+@media (min-width: 480px) { /* 480-768px */
+#top-bar { padding: 0px 50px; }
+#bottom-bar { padding: 12px 50px; }
+#main { padding: 50px 50px 30px 30px; }
+}
+
+@media (min-width: 768px) { /* 768-1024px */
+#top-bar { padding: 0px 60px; }
+#bottom-bar { padding: 12px 60px; }
+#main { padding: 60px 60px 40px 40px; }
+}
+
+@media (min-width: 1024px) { /* more than 1024px */
+
+}
