@@ -313,8 +313,6 @@ var BST = function(){
     return true;
   }
 
-
-
 this.insertArrKth= function(vertexTextArr,index){
     var stateList = [];
     var vertexTraversed = {};
@@ -998,8 +996,10 @@ this.insertArrTail = function(vertexTextArr){
     var vertexTraversed = {};
     var edgeTraversed = {};
     var currentVertex = internalBst["root"];
+    var nextVertex = internalBst[currentVertex]["rightChild"];
     var currentState = createState(internalBst);
     var currentVertexClass;
+    var nextVertexClass;
     var key;
     var i;
 
@@ -1007,76 +1007,133 @@ this.insertArrTail = function(vertexTextArr){
       return this.removeArrHead();
     }
 
+    //Vertex prev = head
+    currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+    currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+    currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
     currentState["status"] = "The current Linked List";
     currentState["lineNo"] = 1;
     stateList.push(currentState);
+    //end
 
-    for(i = 0; i < vertexTextArr.length; i++){
-      var vertexCheckBf;
-
-      // Re-initialization
-      vertexTraversed = {};
-      edgeTraversed = {};
-      currentVertex = internalBst["root"];
-      currentState = createState(internalBst);
+    //temp = head.next
+    currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+    //prev highlight
+    currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+    currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+    //temp highlight
+    nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+    currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
+    //animate highlight
+    currentState["el"][nextVertexClass]["animateHighlighted"] = true;
+    currentState["el"][nextVertexClass]["state"] = EDGE_TRAVERSED;
+    //status
+    currentState["status"] = "The current Linked List";
+    currentState["lineNo"] = 2;
+    stateList.push(currentState);
+    //end
 
       // Find vertex
       while(true){
+        // while (temp.next!=null)
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        //prev highlight
         currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
         currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        //temp hightlight
+        nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+        currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
         vertexTraversed[currentVertex] = true;
+        //status
         currentState["status"] = "check if temp.next is null";
-        currentState["lineNo"] = 2;
+        currentState["lineNo"] = 3;
         stateList.push(currentState);
+        //end
 
-        if(internalBst[currentVertex]["rightChild"]!=null) {
+        if(internalBst[nextVertex]["rightChild"]!=null) {
+          nextVertex = internalBst[nextVertex]["rightChild"];
           currentVertex = internalBst[currentVertex]["rightChild"];
         }
         else break;
 
+        //temp = temp.next , prev = prev.next
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-
+        //prev highlight
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        //temp hightlight
+        nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+        currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
+        vertexTraversed[currentVertex] = true;
+        //prev highlight
         var edgeHighlighted = internalBst[currentVertex]["vertexClassNumber"];
-        edgeTraversed[edgeHighlighted] = true;
         currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
         currentState["el"][edgeHighlighted]["state"] = EDGE_TRAVERSED;
+        //temp highlight
+        var edgeHighlighted2 = internalBst[nextVertex]["vertexClassNumber"];
+        currentState["el"][edgeHighlighted2]["animateHighlighted"] = true;
+        currentState["el"][edgeHighlighted2]["state"] = EDGE_BLUE;
+        //status
         currentState["status"] = "points to next";
-        currentState["lineNo"] = 3;
-        stateList.push(currentState);
-      }
-
-      // Vertex found; begin deletion
-      if(currentVertex != null){
-        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
-
-        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
-
-        currentState["status"] = "Set last vertex.next to null";
         currentState["lineNo"] = 4;
         stateList.push(currentState);
+        //end
       }
-      
-        var parentVertex = internalBst[currentVertex]["parent"];
 
+ 
+
+    
+     
+      //prev.next = null
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      //prev highlight
+      currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+      nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+      currentState["el"][nextVertexClass]["state"] = OBJ_HIDDEN;
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      //temp hightlight
+      nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+      currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
+      vertexTraversed[currentVertex] = true;
+      internalBst[currentVertex]["rightChild"]=null;
+      //status
+      currentState["status"] = "Set last vertex.next to null";
+      currentState["lineNo"] = 5;
+      stateList.push(currentState);
+      //end
+      
+      var parentVertex = internalBst[currentVertex]["parent"];
+      if(parentVertex !=null) internalBst[parentVertex]["rightChild"] = null;
+      else internalBst["root"] = null;
        
-        if(parentVertex !=null) internalBst[parentVertex]["rightChild"] = null;
-        else internalBst["root"] = null;
 
-        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
-        delete internalBst[currentVertex];
-        delete vertexTraversed[currentVertex];
-        delete edgeTraversed[currentVertexClass];
 
-        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        currentState["status"] = "set tail pointer, Remove last vertex";
-        currentState["lineNo"] = 5;
-        stateList.push(currentState);
-
-        vertexCheckBf = parentVertex;
       
+      //delete temp
+      delete internalBst[nextVertex];
+      delete vertexTraversed[nextVertex];
+      delete edgeTraversed[nextVertexClass];
+       
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["status"] = "delete last vertex";
+      currentState["lineNo"] = 6;
+      stateList.push(currentState);
+      //end
 
+      //tail = prev
+      delete internalBst[nextVertex];
+      delete vertexTraversed[nextVertex];
+      delete edgeTraversed[nextVertexClass];
+       
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["status"] = "update tail pointer";
+      currentState["lineNo"] = 7;
+      stateList.push(currentState);
+      //end
+
+      vertexCheckBf = parentVertex;
 
       currentState = createState(internalBst);
       currentState["status"] = "Removal of last vertex completed";
@@ -1084,7 +1141,7 @@ this.insertArrTail = function(vertexTextArr){
       currentState["lineNo"] = 0;
     
       stateList.push(currentState);
-    }
+    
 
     graphWidget.startAnimation(stateList);
  
@@ -1552,13 +1609,13 @@ this.insertArrTail = function(vertexTextArr){
         document.getElementById('code7').innerHTML = '';
         break;
     case 6: // remove TAIL
-        document.getElementById('code1').innerHTML = 'Vertex prev = head, temp = head.next';
-        document.getElementById('code2').innerHTML = 'while (temp.next!=null)';
-        document.getElementById('code3').innerHTML = '&nbsp&nbspprev = prev.next , temp = temp.next';
-        document.getElementById('code4').innerHTML = 'prev.next = null';
-        document.getElementById('code5').innerHTML = 'tail = prev, delete temp';
-        document.getElementById('code6').innerHTML = '';
-        document.getElementById('code7').innerHTML = '';
+        document.getElementById('code1').innerHTML = 'Vertex prev = head';
+        document.getElementById('code2').innerHTML = 'temp = head.next';
+        document.getElementById('code3').innerHTML = 'while (temp.next!=null)';
+        document.getElementById('code4').innerHTML = '&nbsp&nbsptemp = temp.next , prev = prev.next';
+        document.getElementById('code5').innerHTML = 'prev.next = null';
+        document.getElementById('code6').innerHTML = 'delete temp';
+        document.getElementById('code7').innerHTML = 'tail = prev';   
         break;
     case 7: // remove kth
         document.getElementById('code1').innerHTML = 'Vertex prev = head';
