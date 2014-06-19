@@ -389,6 +389,7 @@ this.insertArrKth= function(vertexTextArr,index){
         currentVertex = null;
       }
 
+      //Vertex prev = head
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
       currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
       currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
@@ -396,10 +397,12 @@ this.insertArrKth= function(vertexTextArr,index){
       currentState["status"] = "set prev to head";
       currentState["lineNo"] = 1;
       stateList.push(currentState);
+      //end
 
       // Find parent
       // while(currentVertex != vertexText && currentVertex != null){
       for(j=0;j<index-1;j++){
+        //while (--k!=0)
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
         currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
         currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
@@ -407,6 +410,7 @@ this.insertArrKth= function(vertexTextArr,index){
         currentState["status"] = "decrement k, index specified has not been reached, " + "(k = "+ (index-1-j) +")";
         currentState["lineNo"] = 2;
         stateList.push(currentState);
+        //end
 
         var nextVertex;
          nextVertex = internalBst[currentVertex]["rightChild"];
@@ -414,19 +418,23 @@ this.insertArrKth= function(vertexTextArr,index){
         if(nextVertex == null) break;
         else currentVertex = nextVertex;
 
+        //prev = prev.next
+        parentVertex = internalBst[currentVertex]["parent"];
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        var edgeHighlighted = internalBst[currentVertex]["vertexClassNumber"];
+        var edgeHighlighted = internalBst[parentVertex]["vertexClassNumber"];
         edgeTraversed[edgeHighlighted] = true;
         currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
         currentState["el"][edgeHighlighted]["state"] = EDGE_TRAVERSED;
         currentState["status"] = "points to next vertex";
         currentState["lineNo"] = 3;
         stateList.push(currentState);
+        //end
       }
 
 
       if(currentVertex!=null){
         //additional animation for the last vertex visited
+        //while(--k!=0)
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
         currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
         currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
@@ -434,6 +442,7 @@ this.insertArrKth= function(vertexTextArr,index){
         currentState["status"] = "decrement k, k is 0, continue insertion";
         currentState["lineNo"] = 2;
         stateList.push(currentState);
+        //end
         //end of additional animation
        }
 
@@ -441,102 +450,106 @@ this.insertArrKth= function(vertexTextArr,index){
 
       // First, update internal representation
 
+     
+
+      //var newNodeVertexClass = internalBst[tempChild]["vertexClassNumber"];
+
+      //Vertex temp = prev.next
+      tempVertex = internalBst[currentVertex]["rightChild"];
+      tempVertexClass = internalBst[tempVertex]["vertexClassNumber"];
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][currentVertexClass]["animateHighlighted"] = true;
+      edgeTraversed[currentVertexClass] = true;
+      currentState["status"] = "index specified is found, keep track of the next vertex";
+      currentState["lineNo"] = 4;
+      stateList.push(currentState);
+      //end
+
+
+
+
       internalBst[parseInt(vertexText)] = {
         "leftChild": null,
         "rightChild": null,
         "vertexClassNumber": vertexClassNumberCounter++
       };
-
+      amountVertex++;
       //modified this part for linked list insertion
       var newNode = parseInt(vertexText);
-      var tempChild;
-      //if linked list is empty
-      if ((currentVertex==null)&&(amountVertex==0)){
-        internalBst[parseInt(vertexText)]["parent"] = null;
-        internalBst["root"] = parseInt(vertexText);
-      }
-      //if insert at head
-      else if((index==0)&&(amountVertex>0)){
-        tempChild = internalBst["root"];
-        internalBst[newNode]["rightChild"] = tempChild;
-        internalBst[tempChild]["parent"] = newNode;
-        internalBst["root"] = newNode;
-      }
-      //if there is a parent and there is a child
-      else if((currentVertex != null)&&(internalBst[currentVertex]["rightChild"]!=null)){
-        tempChild = internalBst[currentVertex]["rightChild"];
-        internalBst[newNode]["parent"] = currentVertex;
-        internalBst[newNode]["rightChild"] = tempChild;
-        internalBst[tempChild]["parent"] = newNode;
-        internalBst[currentVertex]["rightChild"] = newNode;
-      }
-      //if it is at the end, i.e. have parent, no children
-      else{
-        internalBst[newNode]["parent"]=currentVertex;
-        internalBst[currentVertex]["rightChild"]=newNode;
-      }
-
-      amountVertex++;
-
-      recalculatePosition();
-
-      var newNodeVertexClass = internalBst[tempChild]["vertexClassNumber"];
-      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] =  EDGE_HIGHLIGHTED;
-      // currentState["el"][newNodeVertexClass]["state"] = EDGE_TRAVERSED;
-      // currentState["el"][newNodeVertexClass]["animateHighlighted"] = true;
-      currentState["status"] = "index specified is found, keep track of the next vertex";
-      currentState["lineNo"] = 4;
-      stateList.push(currentState);
-      edgeTraversed[newNodeVertexClass] = true;
-
-
-      // Then, draw edge
       newNodeVertexClass = internalBst[parseInt(vertexText)]["vertexClassNumber"];
-      if(currentVertex != null){
-        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        currentState["vl"][newNodeVertexClass]["state"] =  EDGE_HIGHLIGHTED;
-        // currentState["el"][newNodeVertexClass]["state"] = EDGE_TRAVERSED;
-        // currentState["el"][newNodeVertexClass]["animateHighlighted"] = true;
-        currentState["status"] = "index specified is found, inserting " + vertexText;
-        currentState["lineNo"] = 5;
-        stateList.push(currentState);
-        edgeTraversed[newNodeVertexClass] = true;
-        vertexTraversed[parseInt(vertexText)] = true;
-     }
+      var tempChild;
 
+      internalBst[newNode]["cx"] = internalBst[tempVertex]["cx"];
+      internalBst[newNode]["cy"] = internalBst[tempVertex]["cy"] + 70;
 
+      
+   
+      //vertex newVertex =  new Vertex(input)
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] =  EDGE_HIGHLIGHTED;
-      currentState["el"][newNodeVertexClass]["state"] = EDGE_TRAVERSED;
-      currentState["el"][newNodeVertexClass]["animateHighlighted"] = true;
-      currentState["status"] = "prev.next points to newNode";
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["status"] = "create new vertex";
       currentState["lineNo"] = 5;
       stateList.push(currentState);
       edgeTraversed[newNodeVertexClass] = true;
+      //end
     
+      //RELINK THE POINTERs
+      internalBst[currentVertex]["rightChild"] = newNode;
+      internalBst[newNode]["parent"] = currentVertex;
+      internalBst[newNode]["rightChild"] = tempVertex;
+      internalBst[tempVertex]["parent"] = newNode;
+      //END RELINKING
+      
 
-      newNodeVertexClass = internalBst[tempChild]["vertexClassNumber"];
+      //prev.next  = newVertex
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] =  EDGE_HIGHLIGHTED;
-      currentState["el"][newNodeVertexClass]["state"] = EDGE_TRAVERSED;
-      currentState["el"][newNodeVertexClass]["animateHighlighted"] = true;
-      currentState["status"] = "newVertex.next points to temp";
+
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][currentVertexClass]["animateHighlighted"] = true;
+      currentState["el"][newNodeVertexClass]["state"] = OBJ_HIDDEN;
+      currentState["status"] = "prev.next points to newVertex";
       currentState["lineNo"] = 6;
       stateList.push(currentState);
-      edgeTraversed[newNodeVertexClass] = true;    
+      //end
 
+      //newVertex.next = temp
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
-      currentState["status"] = vertexText + " has been inserted!"
-      currentState["lineNo"] = 1;
+
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][newNodeVertexClass]["state"] = EDGE_RED;
+      currentState["el"][newNodeVertexClass]["animateHighlighted"] = true;
+      currentState["status"] = "newVertex.next points to temp";
+      currentState["lineNo"] = 7;
+      stateList.push(currentState);
+      //end
+
+
+      recalculatePosition();
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["el"][newNodeVertexClass]["state"] = EDGE_RED;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["status"] = "Re-layout the linked list. " + vertexText + " has been inserted!"
+      currentState["lineNo"] = 0;
 
       stateList.push(currentState);
 
       // End State
       currentState = createState(internalBst);
       currentState["status"] = "Insert " + vertexText + " has been completed."
-   
+      currentState["lineNo"] = 0;
       stateList.push(currentState);
 
     }
@@ -554,14 +567,13 @@ this.insertArrHead= function(vertexTextArr){
     var vertexTraversed = {};
     var edgeTraversed = {};
     var currentVertex = internalBst["root"];
-    var currentState = createState(internalBst);
-    var currentVertexClass;
+    var currentState  = {};
     var key;
     var i;
 
-    currentState["status"] = "The Current Linked List";
-    currentState["lineNo"] = 0;
-    stateList.push(currentState);
+    // currentState["status"] = "The Current Linked List";
+    // currentState["lineNo"] = 0;
+    // stateList.push(currentState);
 
     // Check whether input is array
     if(Object.prototype.toString.call(vertexTextArr) != '[object Array]'){
@@ -610,7 +622,12 @@ this.insertArrHead= function(vertexTextArr){
       vertexTraversed = {};
       edgeTraversed = {};
       currentVertex = null;
-      currentState = createState(internalBst);
+      if(amountVertex>=1){
+        currentState = createState(internalBst);
+      }
+      else{
+        currentState = {};
+      }
 
       // Begin insertion
 
@@ -624,6 +641,9 @@ this.insertArrHead= function(vertexTextArr){
 
       //modified this part for linked list insertion
       var newNode = parseInt(vertexText);
+
+      internalBst[newNode]["cx"] = 20;
+      internalBst[newNode]["cy"] = 120;
       //if linked list is empty
       amountVertex++;
       if(amountVertex>1){
@@ -635,52 +655,66 @@ this.insertArrHead= function(vertexTextArr){
       else {
         internalBst["root"] = newNode;
       }
-   
-
-      recalculatePosition();
 
       // Then, draw edge
       var newNodeVertexClass = internalBst[parseInt(vertexText)]["vertexClassNumber"];
 
-      // Lastly, draw vertex
-      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
-
-      currentState["status"] = "create node"
-      currentState["lineNo"] = 1
-
-      stateList.push(currentState);
 
       if(amountVertex>1){
+          //Vertex temp = temp Vertex(input)
           currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-          var edgeHighlighted = internalBst[tempChild]["vertexClassNumber"];
-          edgeTraversed[edgeHighlighted] = true;
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["el"][newNodeVertexClass]["state"] = OBJ_HIDDEN;
+          currentState["status"] = "create node";
+          currentState["lineNo"] = 1;
+          stateList.push(currentState);
+          //end
+
+         //temp.next = head
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          var edgeHighlighted = internalBst[newNode]["vertexClassNumber"];
           currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
-          currentState["el"][edgeHighlighted]["state"] = EDGE_TRAVERSED;
-          currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
+          currentState["el"][edgeHighlighted]["state"] = EDGE_HIGHLIGHTED;
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
           currentState["status"] = "So temp.next points to head";
           currentState["lineNo"] = 2;
           stateList.push(currentState);
+          //end
       }
       else{
+           //Vertex temp = temp Vertex(input)
           currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-          currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
-          currentState["status"] = "head is null, do nothing"
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["status"] = "create node";
+          currentState["lineNo"] = 1;
+          stateList.push(currentState);
+          //end
+
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["status"] = "head is null, temp.next is null"
           currentState["lineNo"] = 2;
           stateList.push(currentState);
       }
-      
+
+      //hed = temp
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
-      currentState["status"] = vertexText + " has been inserted!"
-      currentState["lineNo"] = 2;
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["status"] = "Head points to temp"
+      currentState["lineNo"] = 3;
+      stateList.push(currentState);
+      //end
+      
+      recalculatePosition();
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["status"] = "Re-layout the linked list";
+      currentState["lineNo"] = 0;
       stateList.push(currentState);
 
-      // End State
-      currentState = createState(internalBst);
-      currentState["status"] = "Head points to new vertex, Insert " + vertexText + " has been completed."
-      currentState["lineNo"] = 3;
-
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["status"] = vertexText + " has been inserted!"
+      currentState["lineNo"] = 0;
       stateList.push(currentState);
 
     }
@@ -703,6 +737,10 @@ this.insertArrTail = function(vertexTextArr){
     var currentVertexClass;
     var key;
     var i;
+
+    if(amountVertex==0){
+      return this.insertArrHead(vertexTextArr);
+    }
 
     currentState["status"] = "The current LinkedList";
     currentState["lineNo"] = 0;
@@ -785,6 +823,7 @@ this.insertArrTail = function(vertexTextArr){
       // Begin insertion
 
       // First, update internal representation
+      var newNode = parseInt(vertexText);
       internalBst[parseInt(vertexText)] = {
         "leftChild": null,
         "rightChild": null,
@@ -806,42 +845,42 @@ this.insertArrTail = function(vertexTextArr){
       recalculatePosition();
 
       // Then, draw edge
+      //Vertex temp = new vertex(input)
       var newNodeVertexClass = internalBst[parseInt(vertexText)]["vertexClassNumber"];
+      currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
 
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
+      currentState["el"][currentVertexClass]["state"] = OBJ_HIDDEN;
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
       currentState["status"] = "create new vertex"
       currentState["lineNo"] = 1;
       stateList.push(currentState);
+      //end
 
-      if(currentVertex != null){
-        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        // currentState["vl"][newNodeVertexClass]["state"] = OBJ_HIDDEN;
-        currentState["el"][newNodeVertexClass]["state"] = EDGE_TRAVERSED;
-        currentState["el"][newNodeVertexClass]["animateHighlighted"] = true;
-        currentState["status"] = "tail.next points to new vertex. Inserting " + vertexText + " ...";
-        currentState["lineNo"] = 2;
-        stateList.push(currentState);
-        edgeTraversed[newNodeVertexClass] = true;
-      }
-      else{
-        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
-        currentState["status"] = "tail is null, do nothing"
-        currentState["lineNo"] = 2;
-        stateList.push(currentState);
-      }
+      
+      //tail.next = temp
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      // currentState["vl"][newNodeVertexClass]["state"] = OBJ_HIDDEN;
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][currentVertexClass]["animateHighlighted"] = true;
+      currentState["status"] = "tail.next points to new vertex. Inserting " + vertexText + " ...";
+      currentState["lineNo"] = 2;
+      stateList.push(currentState);
+      //end
 
       // Lastly, draw vertex
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = EDGE_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
       currentState["status"] = "Update tail pointer. " + vertexText + " has been inserted!"
       currentState["lineNo"] = 3;
       stateList.push(currentState);
       // End State
+
       currentState = createState(internalBst);
       currentState["status"] = "Insert " + vertexText + " to tail has been completed."
-      currentState["lineNo"] = 3;
+      currentState["lineNo"] = 0;
       stateList.push(currentState);
 
     }
@@ -1021,7 +1060,7 @@ this.insertArrTail = function(vertexTextArr){
     currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
     //temp highlight
     nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
-    currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
+    currentState["vl"][nextVertexClass]["state"] = VERTEX_GREEN_FILL;
     //animate highlight
     currentState["el"][currentVertexClass]["animateHighlighted"] = true;
     currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
@@ -1040,7 +1079,7 @@ this.insertArrTail = function(vertexTextArr){
         currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
         //temp hightlight
         nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
-        currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["vl"][nextVertexClass]["state"] = VERTEX_GREEN_FILL;
         vertexTraversed[currentVertex] = true;
         //status
         currentState["status"] = "check if temp.next is null";
@@ -1061,7 +1100,7 @@ this.insertArrTail = function(vertexTextArr){
         currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
         //temp hightlight
         nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
-        currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["vl"][nextVertexClass]["state"] = VERTEX_GREEN_FILL;
         vertexTraversed[currentVertex] = true;
         //prev highlight
         parentVertex = internalBst[currentVertex]["parent"];
@@ -1072,7 +1111,7 @@ this.insertArrTail = function(vertexTextArr){
         //temp highlight
         var edgeHighlighted2 = internalBst[currentVertex]["vertexClassNumber"];
         currentState["el"][edgeHighlighted2]["animateHighlighted"] = true;
-        currentState["el"][edgeHighlighted2]["state"] = EDGE_BLUE;
+        currentState["el"][edgeHighlighted2]["state"] = EDGE_GREEN;
         //status
         currentState["status"] = "points to next";
         currentState["lineNo"] = 4;
@@ -1093,7 +1132,7 @@ this.insertArrTail = function(vertexTextArr){
       currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
       //temp hightlight
       nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
-      currentState["vl"][nextVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["vl"][nextVertexClass]["state"] = VERTEX_GREEN_FILL;
       vertexTraversed[currentVertex] = true;
       
       //status
@@ -1125,7 +1164,7 @@ this.insertArrTail = function(vertexTextArr){
       delete edgeTraversed[nextVertexClass];
        
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_BLUE_FILL;
       currentState["status"] = "update tail pointer";
       currentState["lineNo"] = 7;
       stateList.push(currentState);
@@ -1270,8 +1309,8 @@ this.insertArrTail = function(vertexTextArr){
         var edgeHighlighted = internalBst[parentVertex]["vertexClassNumber"];
         edgeTraversed[edgeHighlighted] = true;
         currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
-        currentState["el"][edgeHighlighted]["state"] = EDGE_BLUE;
-        currentState["vl"][currentVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["el"][edgeHighlighted]["state"] = EDGE_GREEN;
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_GREEN_FILL;
         vertexTraversed[currentVertex] = true;
         currentState["status"] = "keep track of the vertex to be deleted";
         currentState["lineNo"] = 4;
@@ -1332,7 +1371,7 @@ this.insertArrTail = function(vertexTextArr){
         parentVertexClass = internalBst[parentVertex]["vertexClassNumber"];
         currentState["vl"][parentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
         //currentState["el"][currentVertexClass]["state"] = OBJ_HIDDEN;
-        currentState["vl"][currentVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_GREEN_FILL;
         if(parentVertex != null){
           currentState["el"][parentVertexClass]["state"] = EDGE_HIGHLIGHTED;
           currentState["el"][parentVertexClass]["animateHighlighted"] = true;
@@ -1612,7 +1651,7 @@ this.insertArrTail = function(vertexTextArr){
         break;
     case 1: // insertHead
         document.getElementById('code1').innerHTML = 'Vertex temp = new Vertex(input)';
-        document.getElementById('code2').innerHTML = 'if (head!=null) temp.next = head';
+        document.getElementById('code2').innerHTML = 'temp.next = head';
         document.getElementById('code3').innerHTML = 'head = temp';
         document.getElementById('code4').innerHTML = '';
         document.getElementById('code5').innerHTML = '';
@@ -1621,7 +1660,7 @@ this.insertArrTail = function(vertexTextArr){
         break;
     case 2: // insertTail
         document.getElementById('code1').innerHTML = 'Vertex temp = new Vertex(input)';
-        document.getElementById('code2').innerHTML = 'if (tail!=null) tail.next = temp';
+        document.getElementById('code2').innerHTML = 'tail.next = temp';
         document.getElementById('code3').innerHTML = 'tail = temp';
         document.getElementById('code4').innerHTML = '';
         document.getElementById('code5').innerHTML = '';
