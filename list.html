@@ -86,19 +86,48 @@
         </div>
         
         <div class="insert action-menu-pullout">
-            <div id="insert-input" class="new-menu-option"><input type="text" id="v-insert" title="Enter an integer or comma-separated array of integers" autocomplete="off" value=20 /></div>
+        	<div id="insert-kth" class="execAction new-menu-option coloured-menu-option" onclick=insertModelingOpen("insertkth")><p>Insert k-th ----------</p>
+              <div id="insertkth-input" class="new-menu-option">
+                <input type="text" id="v-insert-kth-value" title="Enter an integer or comma-separated array of integers" autocomplete="off" value=20 />
+                <input type="text" id="v-insert-kth" title="Enter the index to be inserted" autocomplete="off" value=0 />
+                <div id="insertkth-go" class="execAction coloured-menu-option" onClick=insertKth() title="Insert to kth"><p>GO</p></div>
+              </div>
+            </div>
+
+            <div id="insert-head" class="execAction new-menu-option coloured-menu-option" onclick=insertModelingOpen("inserthead")><p>Insert Head -- </p>
+              <div id="inserthead-input" class="new-menu-option">
+                <input type="text" id="v-insert-head-value" title="Enter an integer or comma-separated array of integers" autocomplete="off" value=20 />
+                <div id="inserthead-go" class="execAction coloured-menu-option"  onClick=insertHead() title="Insert to Head"><p>GO</p></div>
+              </div>
+            </div>
+
+            <div id="insert-tail" class="execAction new-menu-option coloured-menu-option" onclick=insertModelingOpen("inserttail")><p>Insert Tail -- </p>
+              <div id="inserttail-input" class="new-menu-option">
+                <input type="text" id="v-insert-tail-value" title="Enter an integer or comma-separated array of integers" autocomplete="off" value=20 />
+                <div id="inserttail-go" class="execAction coloured-menu-option"  onClick=insertTail() title="Insert to Tail"><p>GO</p></div>
+              </div>
+            </div>
+
+            <div id="insert-err" class="err"></div>
+
+
+            <!-- <div id="insert-input" class="new-menu-option"><input type="text" id="v-insert" title="Enter an integer or comma-separated array of integers" autocomplete="off" value=20 /></div>
  			<div id="insert-head" class="execAction new-menu-option coloured-menu-option" onClick=insertHead()><p>Insert to Head</p></div>
             <div id="insert-tail" class="execAction new-menu-option coloured-menu-option" onClick=insertTail()><p>Insert to Tail</p></div>
             <div id="insert-input-kth" class="new-menu-option"><input type="text" id="v-insert-kth" title="Enter the index to be inserted" autocomplete="off" value=0 /></div>
             <div id="insert-kth" class="execAction new-menu-option coloured-menu-option" onClick=insertKth()><p>Insert to k-th</p></div>
-            <div id="insert-err" class="err"></div>
+            <div id="insert-err" class="err"></div> -->
         </div>
         
         <div class="remove action-menu-pullout">
        		<div id="remove-head" class="execAction new-menu-option coloured-menu-option" onClick=removeHead()><p>Remove Head</p></div>
             <div id="remove-tail" class="execAction new-menu-option coloured-menu-option" onClick=removeTail()><p>Remove Tail</p></div>
-            <div id="remove-input-kth" class="new-menu-option"><input type="text" id="v-remove-kth" title="Enter the index to be removed" autocomplete="off" value=0 /></div>
-            <div id="remove-kth" class="execAction new-menu-option coloured-menu-option" onClick=removeKth()><p>remove k-th</p></div>
+            <div id="remove-kth" class="execAction new-menu-option coloured-menu-option" onclick=removeModelingOpen("removekth")><p>remove k-th</p>
+              <div id="removekth-input" class="new-menu-option">
+               <input type="text" id="v-remove-kth" title="Enter the index to be removed" autocomplete="off" value=0 />
+                <div id="removekth-go" class="execAction coloured-menu-option" onClick=removeKth() title="Remove k-th"><p>GO</p></div>
+              </div>
+            </div>
         	<div id="remove-err" class="err"></div>
         </div>
        <!--  
@@ -330,7 +359,7 @@
  	function insertHead(){
  		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			var input = $('#v-insert').val();
+			var input = $('#v-insert-head-value').val();
 			input = input.split(",");
 			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
 				$('#current-action').show();
@@ -345,7 +374,7 @@
     function insertTail(){
     	if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			var input = $('#v-insert').val();
+			var input = $('#v-insert-tail-value').val();
 			input = input.split(",");
 			if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
 				$('#current-action').show();
@@ -360,7 +389,7 @@
     function insertKth(){
     	if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			var input = $('#v-insert').val();
+			var input = $('#v-insert-kth-value').val();
 			var index = $('#v-insert-kth').val();
 			input = input.split(",");
 			if((mode=="exploration")&&bstWidget.insertArrKth(input,index)) {
@@ -418,6 +447,21 @@
 			}
 		}, 500);
     }
+
+	 function insertModelingOpen(modelingType)
+	  {
+	    $(".insert").css("bottom","60px");
+	    if (modelingType != "insertkth") $('#insertkth-input').fadeOut('fast');
+	    if (modelingType != "inserthead")   $('#inserthead-input').fadeOut('fast');
+	    if (modelingType != "inserttail")  $('#inserttail-input').fadeOut('fast');
+	    $('#' + modelingType + '-input').fadeIn('fast');
+	  }
+
+	   function removeModelingOpen(modelingType)
+	  {
+	    $(".remove").css("bottom","33px");
+	    $('#' + modelingType + '-input').fadeIn('fast');
+	  }
 
 	
 	//playback controls might fit better in viz.js, but put here in case some viz does not use GraphWidgetNew.js
