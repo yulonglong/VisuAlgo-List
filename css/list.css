@@ -1,5 +1,78 @@
 @charset "utf-8";
 
+
+#insertkth-input input {
+	width: 25px;
+	padding: 8px;
+	margin-right: 2px;
+	float:left;
+}
+#insertkth-go p
+{ 
+	padding: 8px 8px 7px; 
+	float:right;
+}
+
+#inserthead-input input {
+	width: 25px;
+	padding: 8px;
+	margin-right: 2px;
+	float:left;
+}
+#inserthead-go p
+{ 
+	padding: 8px 8px 7px; 
+	float:right;
+}
+
+#inserttail-input input {
+	width: 25px;
+	padding: 8px;
+	margin-right: 2px;
+	float:left;
+}
+#inserttail-go p
+{ 
+	padding: 8px 8px 7px; 
+	float:right;
+}
+
+#removekth-input input {
+	width: 25px;
+	padding: 8px;
+	margin-right: 2px;
+	float:left;
+}
+#removekth-go p
+{ 
+	padding: 8px 8px 7px; 
+	float:right;
+}
+
+
+#bipartite0
+{
+	float:left;
+	padding: 2px;
+}
+#bipartite1
+{
+	float:left;
+	padding: 2px;
+}
+#bipartite2
+{
+	float:left;
+	padding: 2px;
+}
+#bipartite3
+{
+	float:left;
+	padding: 2px;
+}
+
+
+
 /*all action pullout (input) stuff here*/
 .create { bottom: 146px; }
 	#create-random p { padding: 7px 8px 8px; }

@@ -37,6 +37,10 @@ function closeSearch() {
 	}
 }
 function openInsert() {
+	$(".insert").css("bottom","92px");
+	$('#insertkth-input').hide();
+	$('#inserthead-input').hide();
+	$('#inserttail-input').hide();
 	if(!isInsertOpen) {
 		$('.insert').fadeIn('fast');
 		isInsertOpen = true;
@@ -50,6 +54,8 @@ function closeInsert() {
 	}
 }
 function openRemove() {
+	$(".remove").css("bottom","65px");
+	$('#removekth-input').hide();
 	if(!isRemoveOpen) {
 		$('.remove').fadeIn('fast');
 		isRemoveOpen = true;
@@ -152,24 +158,6 @@ $( document ).ready(function() {
 		closePred();
 		closeInorder();
 		openRemove();
-	});
-	$('#successor').click(function() {
-		closeCreate();
-		closeSearch();
-		closeInsert();
-		closeRemove();
-		closePred();
-		closeInorder();
-		openSucc();
-	});
-	$('#predecessor').click(function() {
-		closeCreate();
-		closeSearch();
-		closeInsert();
-		closeRemove();
-		closeSucc();
-		closeInorder();
-		openPred();
 	});
 	$('#inorder').click(function() {
 		closeCreate();
