@@ -52,23 +52,22 @@
         </div>
     </div>
 </div>
-    
-
 
     <div id="viz"></div>
     
     <div id="current-action" class="panel"><p></p></div>
     
+  
     <div id="actions" class="panel">
     	<p id="create">Create</p>
-        <p id="search">Search</p>
+        <p id="search" onClick=searchGeneric()>Search</p>
 		<p id="insert">Insert</p>
-		<p id="remove">Remove</p>
-		<!-- <p id="successor">Successor</p>
-		<p id="predecessor">Predecessor</p>
-        <p id="inorder" class="execAction" onclick=inorderTraversal()>In-order Traversal</p> -->
+		<p id="remove" onClick=removeGeneric()>Remove</p>
     </div>
+
     <div id="actions-hide" class="panel-hide"><img src="img/arrow_white_right.png" title="show/hide actions panel"/></div>
+
+    <!-- START LINKED LIST DIV -->
     <div id="actions-extras">
     <!--put all the extra action pullouts (input) and error messages here-->
     	<div class="create action-menu-pullout">
@@ -144,6 +143,8 @@
         </div>
       
     </div>
+    <!-- END LINKED LIST DIV -->
+
     
     <div id="status" class="panel"><p></p></div>
     <div id="status-hide" class="panel-hide"><img src="img/arrow_white_right.png" title="show/hide status panel"/></div>
@@ -237,48 +238,136 @@
 	//this viz-specific code
 	var bstWidget = new BST();
     var gw = bstWidget.getGraphWidget();
+    var activeStatus = "list";
 	
 	//title changing
 	$('#title-LL').click(function() {
 		if(isPlaying) {	stop(); }
+		hideEntireActionsPanel();
 		showActionsPanel();
+		displayList();
 		hideStatusPanel();
 		hideCodetracePanel();
-		window.location.href = "list.html"
-		// bstWidget.isAVL(false);
+		activeStatus = "list";
 	});
 	$('#title-Stack').click(function() {
 		if(isPlaying) {	stop(); }
+		hideEntireActionsPanel();
 		showActionsPanel();
+		displayStack();
 		hideStatusPanel();
 		hideCodetracePanel();
-		window.location.href = "stack.html";
-		// bstWidget.isAVL(true);
+		activeStatus = "stack";
 	});
 	$('#title-Queue').click(function() {
 		if(isPlaying) {	stop(); }
+		hideEntireActionsPanel();
 		showActionsPanel();
+		displayQueue();
 		hideStatusPanel();
 		hideCodetracePanel();
-		window.location.href = "queue.html";
-		// bstWidget.isAVL(true);
+		activeStatus = "queue";
 	});
 	$('#title-DLL').click(function() {
 		if(isPlaying) {	stop(); }
+		hideActionsPanel();
+		displayList();
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
-		window.location.href = "doublylinkedlist.html"
-		// bstWidget.isAVL(false);
 	});
 	$('#title-Deque').click(function() {
 		if(isPlaying) {	stop(); }
+		hideActionsPanel();
+		displayQueue();
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
-		window.location.href = "deque.html";
-		// bstWidget.isAVL(true);
 	});
+
+
+
+	function displayList(){
+		document.getElementById("search-input").style.display = "";
+		document.getElementById("search-go").style.display = "";
+		document.getElementById("search-err").style.display = "";
+		document.getElementById("insert-head").style.display = "";
+		document.getElementById("insert-tail").style.display = "";
+		document.getElementById("insert-kth").style.display = "";
+		document.getElementById("remove-head").style.display = "";
+		document.getElementById("remove-tail").style.display = "";
+		document.getElementById("remove-kth").style.display = "";
+		changeTextList();
+	}
+
+	function displayStack(){
+		document.getElementById("search-input").style.display = "none";
+		document.getElementById("search-go").style.display = "none";
+		document.getElementById("search-err").style.display = "none";
+		document.getElementById("insert-head").style.display = "";
+		document.getElementById("insert-tail").style.display = "none";
+		document.getElementById("insert-kth").style.display = "none";
+		document.getElementById("remove-head").style.display = "none";
+		document.getElementById("remove-tail").style.display = "none";
+		document.getElementById("remove-kth").style.display = "none";
+		changeTextQueue();
+		changeTextStack();
+	}
+
+	function displayQueue(){
+		document.getElementById("search-input").style.display = "none";
+		document.getElementById("search-go").style.display = "none";
+		document.getElementById("search-err").style.display = "none";
+		document.getElementById("insert-head").style.display = "none";
+		document.getElementById("insert-tail").style.display = "";
+		document.getElementById("insert-kth").style.display = "none";
+		document.getElementById("remove-head").style.display = "none";
+		document.getElementById("remove-tail").style.display = "none";
+		document.getElementById("remove-kth").style.display = "none";
+		changeTextQueue();
+	}
+
+	function changeTextList(){
+		document.getElementById('create').innerHTML = "Create";
+		document.getElementById('search').innerHTML = "Search";
+		document.getElementById('insert').innerHTML = "Insert";
+		document.getElementById('remove').innerHTML = "Remove";
+	}
+
+	function changeTextStack(){
+		document.getElementById('create').innerHTML = "Create";
+		document.getElementById('search').innerHTML = "Peek";
+		document.getElementById('insert').innerHTML = "Push";
+		document.getElementById('remove').innerHTML = "Pop";
+	}
+
+	function changeTextQueue(){
+		document.getElementById('create').innerHTML = "Create";
+		document.getElementById('search').innerHTML = "Peek";
+		document.getElementById('insert').innerHTML = "Enqueue";
+		document.getElementById('remove').innerHTML = "Dequeue";
+	}
+	function searchGeneric(){
+		if(activeStatus=="list"){
+		}
+		else if(activeStatus=="stack"){
+			peekStack();
+		}
+		else if(activeStatus=="queue"){
+			peekQueue();
+		}
+	}
+
+	function removeGeneric(){
+		if(activeStatus=="list"){
+		}
+		else if(activeStatus=="stack"){
+			removeHead();
+		}
+		else if(activeStatus=="queue"){
+			removeHead();
+		}
+	}
 
 	function random() {
 		if(isPlaying) {	stop(); }
@@ -335,6 +424,32 @@
 		hideStatusPanel();
 		hideCodetracePanel();
 	}
+
+	 function peekStack(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			if((mode=="exploration")&&bstWidget.peek()) {
+				$('#current-action').show();
+				$('#current-action p').html("Peek top");
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500)
+    }
+
+     function peekQueue(){
+		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			if((mode=="exploration")&&bstWidget.peek()) {
+				$('#current-action').show();
+				$('#current-action p').html("Peek front");
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500)
+    }
 
     function searchVertex(){
 		if(isPlaying) {	stop(); }
