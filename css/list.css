@@ -1,6 +1,32 @@
 @charset "utf-8";
 
 
+#createfixedsize-input input {
+	width: 25px;
+	padding: 8px;
+	margin-right: 2px;
+	float:left;
+}
+
+#createfixedsize-go p
+{ 
+	padding: 8px 8px 7px; 
+	float:right;
+}
+
+#createuserdefined-input input {
+	width: 75px;
+	padding: 8px;
+	margin-right: 2px;
+	float:left;
+}
+
+#createuserdefined-go p
+{ 
+	padding: 8px 8px 7px; 
+	float:right;
+}
+
 #insertkth-input input {
 	width: 25px;
 	padding: 8px;

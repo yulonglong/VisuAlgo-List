@@ -53,6 +53,8 @@
     </div>
 </div>
     
+
+
     <div id="viz"></div>
     
     <div id="current-action" class="panel"><p></p></div>
@@ -72,10 +74,20 @@
     	<div class="create action-menu-pullout">
     		<div id="create-random" class="execAction new-menu-option coloured-menu-option" onClick=random()><p>Random</p></div>
     		<div id="create-random-sorted" class="execAction new-menu-option coloured-menu-option" onClick=randomLL()><p>Random Sorted</p></div>
-    		<div id="create-input" class="new-menu-option"><input type="text" id="v-create-size" title="Enter the size of the linked list" autocomplete="off" value=3 /></div>
-    		<div id="create-random-fixed-size" class="execAction new-menu-option coloured-menu-option" onClick=randomFixedSize()><p>Random Fixed Size</p></div>
-    		<div id="create-input-arr" class="new-menu-option"><input type="text" id="v-create-arr" title="Enter the elements separated by comma" autocomplete="off" value="1,2,3" /></div>
-    		<div id="create-from-arr" class="execAction new-menu-option coloured-menu-option" onClick=nonRandom()><p>User Defined</p></div>
+    		
+    		<div id="create-random-fixed-size" class="execAction new-menu-option coloured-menu-option" onclick=createModelingOpen("createfixedsize")><p>Random Fixed Size</p>
+    			<div id="createfixedsize-input" class="new-menu-option">
+    				<input type="text" id="v-create-size" title="Enter the size of the linked list" autocomplete="off" value=3 />
+                	<div id="createfixedsize-go" class="execAction coloured-menu-option"  onClick=randomFixedSize() title="Create random fixed size linked list"><p>GO</p></div>
+                </div>
+    		</div>
+    		<!-- <div id="create-input-arr" class="new-menu-option"><input type="text" id="v-create-arr" title="Enter the elements separated by comma" autocomplete="off" value="1,2,3" /></div> -->
+    		<div id="create-from-arr" class="execAction new-menu-option coloured-menu-option" onclick=createModelingOpen("createuserdefined")><p>--- User Defined List ---</p>
+    			<div id="createuserdefined-input" class="new-menu-option">
+    				<input type="text" id="v-create-arr" title="Enter the elements separated by comma" autocomplete="off" value="1,2,3" />
+                	<div id="createuserdefined-go" class="execAction coloured-menu-option"  onClick=nonRandom() title="Create random fixed size linked list"><p>GO</p></div>
+                </div>
+            </div>
     		<div id="create-err" class="err"></div>
     	</div>
 
@@ -124,28 +136,13 @@
             <div id="remove-tail" class="execAction new-menu-option coloured-menu-option" onClick=removeTail()><p>Remove Tail</p></div>
             <div id="remove-kth" class="execAction new-menu-option coloured-menu-option" onclick=removeModelingOpen("removekth")><p>remove k-th</p>
               <div id="removekth-input" class="new-menu-option">
-               <input type="text" id="v-remove-kth" title="Enter the index to be removed" autocomplete="off" value=2 />
+                <input type="text" id="v-remove-kth" title="Enter the index to be removed" autocomplete="off" value=2 />
                 <div id="removekth-go" class="execAction coloured-menu-option" onClick=removeKth() title="Remove k-th"><p>GO</p></div>
               </div>
             </div>
         	<div id="remove-err" class="err"></div>
         </div>
-       <!--  
-        <div class="successor action-menu-pullout">
-            <div id="succ-input" class="new-menu-option"><input type="text" id="v-succ" title="Enter an integer" autocomplete="off" value=15 /></div>
-            <div id="succ-go" class="execAction coloured-menu-option" onclick=successor()><p>GO</p></div>
-            <div id="succ-err" class="err"></div>
-        </div>
-
-        <div class="predecessor action-menu-pullout">
-            <div id="pred-input" class="new-menu-option"><input type="text" id="v-pred" title="Enter an integer" autocomplete="off" value=15 /></div>
-            <div id="pred-go" class="execAction coloured-menu-option" onclick=predecessor()><p>GO</p></div>
-            <div id="pred-err" class="err"></div>
-        </div> -->
-
-        <div class="inorder action-menu-pullout">
-        	<div id="inorder-err" class="err"></div>
-        </div>
+      
     </div>
     
     <div id="status" class="panel"><p></p></div>
@@ -448,20 +445,29 @@
 		}, 500);
     }
 
-	 function insertModelingOpen(modelingType)
-	  {
-	    $(".insert").css("bottom","60px");
-	    if (modelingType != "insertkth") $('#insertkth-input').fadeOut('fast');
-	    if (modelingType != "inserthead")   $('#inserthead-input').fadeOut('fast');
-	    if (modelingType != "inserttail")  $('#inserttail-input').fadeOut('fast');
-	    $('#' + modelingType + '-input').fadeIn('fast');
-	  }
+	function createModelingOpen(modelingType)
+    {
+    	$(".create").css("bottom","114px");
+   	 	if (modelingType != "createfixedsize") $('#createfixedsize-input').fadeOut('fast');
+    	if (modelingType != "createuserdefined")   $('#createuserdefined-input').fadeOut('fast');
+    	$('#' + modelingType + '-input').fadeIn('fast');
+    }
 
-	   function removeModelingOpen(modelingType)
-	  {
-	    $(".remove").css("bottom","33px");
-	    $('#' + modelingType + '-input').fadeIn('fast');
-	  }
+
+	function insertModelingOpen(modelingType)
+	{
+		$(".insert").css("bottom","60px");
+		if (modelingType != "insertkth") $('#insertkth-input').fadeOut('fast');
+		if (modelingType != "inserthead")   $('#inserthead-input').fadeOut('fast');
+		if (modelingType != "inserttail")  $('#inserttail-input').fadeOut('fast');
+		$('#' + modelingType + '-input').fadeIn('fast');
+	}
+
+	function removeModelingOpen(modelingType)
+	{
+		$(".remove").css("bottom","33px");
+		$('#' + modelingType + '-input').fadeIn('fast');
+	}
 
 	
 	//playback controls might fit better in viz.js, but put here in case some viz does not use GraphWidgetNew.js

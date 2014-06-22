@@ -11,6 +11,9 @@ var isPredOpen = false;
 var isInorderOpen = false;
 
 function openCreate() {
+	$(".create").css("bottom","146px");
+	$('#createfixedsize-input').hide();
+	$('#createuserdefined-input').hide();
 	if(!isCreateOpen) {
 		$('.create').fadeIn('fast');
 		isCreateOpen = true;
