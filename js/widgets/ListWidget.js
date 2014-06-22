@@ -322,10 +322,10 @@ this.insertArrKth= function(vertexTextArr,index){
     stateList.push(currentState);
 
     // Check whether input is array
-    if(Object.prototype.toString.call(vertexTextArr) != '[object Array]'){
-      $('#insert-err').html("Please fill in a number or comma-separated array of numbers!");
-      return false;
-    }
+    // if(Object.prototype.toString.call(vertexTextArr) != '[object Array]'){
+    //   $('#insert-err').html("Please fill in a number or comma-separated array of numbers!");
+    //   return false;
+    // }
 
     // Loop through all array values and...
 
@@ -348,8 +348,8 @@ this.insertArrKth= function(vertexTextArr,index){
     //end of index checking
      
     
-    for(i = 0; i < vertexTextArr.length; i++){
-      var vt = parseInt(vertexTextArr[i]);
+    //for(i = 0; i < vertexTextArr.length; i++){
+      var vt = parseInt(vertexTextArr);
 
       // 1. Check whether value is number
       if(isNaN(vt)){
@@ -374,11 +374,11 @@ this.insertArrKth= function(vertexTextArr,index){
         $('#insert-err').html("Sorry, maximum size is 10 ");
         return false;
       }
-    }
+
+    //}
 
 
-    for(i = 0; i < vertexTextArr.length; i++){
-      var vertexText = parseInt(vertexTextArr[i]);
+      var vertexText = parseInt(vertexTextArr);
 
       // Re-initialization
       vertexTraversed = {};
@@ -552,7 +552,7 @@ this.insertArrKth= function(vertexTextArr,index){
       currentState["lineNo"] = 0;
       stateList.push(currentState);
 
-    }
+    
 
     graphWidget.startAnimation(stateList);
  
@@ -575,18 +575,11 @@ this.insertArrHead= function(vertexTextArr){
     // currentState["lineNo"] = 0;
     // stateList.push(currentState);
 
-    // Check whether input is array
-    if(Object.prototype.toString.call(vertexTextArr) != '[object Array]'){
-      $('#insert-err').html("Please fill in a number or comma-separated array of numbers!");
-      return false;
-    }
-
     // Loop through all array values and...
 
     var tempInternalBst = deepCopy(internalBst); // Use this to simulate internal insertion
     
-    for(i = 0; i < vertexTextArr.length; i++){
-      var vt = parseInt(vertexTextArr[i]);
+      var vt = parseInt(vertexTextArr);
 
       // 1. Check whether value is number
       if(isNaN(vt)){
@@ -611,12 +604,11 @@ this.insertArrHead= function(vertexTextArr){
         $('#insert-err').html("Sorry, maximum size is 10 ");
         return false;
       }
-    }
+    
 
    
 
-    for(i = 0; i < vertexTextArr.length; i++){
-      var vertexText = parseInt(vertexTextArr[i]);
+      var vertexText = parseInt(vertexTextArr);
 
       // Re-initialization
       vertexTraversed = {};
@@ -717,7 +709,7 @@ this.insertArrHead= function(vertexTextArr){
       currentState["lineNo"] = 0;
       stateList.push(currentState);
 
-    }
+    
 
     graphWidget.startAnimation(stateList);
  
@@ -746,18 +738,12 @@ this.insertArrTail = function(vertexTextArr){
     currentState["lineNo"] = 0;
     stateList.push(currentState);
 
-    // Check whether input is array
-    if(Object.prototype.toString.call(vertexTextArr) != '[object Array]'){
-      $('#insert-err').html("Please fill in a number or comma-separated array of numbers!");
-      return false;
-    }
 
     // Loop through all array values and...
 
     var tempInternalBst = deepCopy(internalBst); // Use this to simulate internal insertion
     
-    for(i = 0; i < vertexTextArr.length; i++){
-      var vt = parseInt(vertexTextArr[i]);
+      var vt = parseInt(vertexTextArr);
 
       // 1. Check whether value is number
       if(isNaN(vt)){
@@ -781,12 +767,11 @@ this.insertArrTail = function(vertexTextArr){
         $('#insert-err').html("Sorry, maximum size is 10 ");
         return false;
       }
-    }
+    
 
    
 
-    for(i = 0; i < vertexTextArr.length; i++){
-      var vertexText = parseInt(vertexTextArr[i]);
+      var vertexText = parseInt(vertexTextArr);
 
       // Re-initialization
       vertexTraversed = {};
@@ -883,8 +868,7 @@ this.insertArrTail = function(vertexTextArr){
       currentState["lineNo"] = 0;
       stateList.push(currentState);
 
-    }
-
+    
     graphWidget.startAnimation(stateList);
  
     populatePseudocode(2);
@@ -1196,21 +1180,11 @@ this.insertArrTail = function(vertexTextArr){
 
 
 
-    if(Object.prototype.toString.call(vertexTextArr) != '[object Array]'){
-      $('#remove-err').html("Please fill in a number");
-      return false;
-    }
-    if(vertexTextArr.length!=1){
-       $('#remove-err').html("Please enter one index only");
-       return false;
-    }
-
     // Loop through all array values and...
     
     var index;
-    for(i = 0; i < vertexTextArr.length; i++){
 
-      var vt = parseInt(vertexTextArr[i]);
+      var vt = parseInt(vertexTextArr);
       
       // Check whether value is number
       if(isNaN(vt)){
@@ -1226,7 +1200,7 @@ this.insertArrTail = function(vertexTextArr){
          return false;
       }
       index = vt;
-    }
+    
 
     if(index==0){
       return this.removeArrHead();
