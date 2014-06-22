@@ -179,6 +179,34 @@ var BST = function(){
       return true;
   }
 
+   this.peek = function(vertexText){
+    var stateList = [];
+    var vertexTraversed = {};
+    var edgeTraversed = {};
+    var currentVertex = internalBst["root"];
+    var currentState = createState(internalBst);
+    var currentVertexClass;
+    var key;
+    var index = 0;
+
+    //temp = head , index = 0
+    currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+    currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+    currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+    currentState["status"] = "return head.data";
+    currentState["lineNo"] = 1;
+    stateList.push(currentState);
+
+    currentState = createState(internalBst);
+    currentState["status"] = "Peek is complete";
+    currentState["lineNo"] = 0;
+    stateList.push(currentState);
+
+    graphWidget.startAnimation(stateList);
+    populatePseudocode(3);
+    return true;
+  }
+
   this.search = function(vertexText){
     var stateList = [];
     var vertexTraversed = {};
@@ -1641,8 +1669,8 @@ this.insertArrTail = function(vertexTextArr){
         document.getElementById('code6').innerHTML = '';
         document.getElementById('code7').innerHTML = '';
         break;
-    case 3: // in-order traversal
-        document.getElementById('code1').innerHTML = '';
+    case 3: // peek
+        document.getElementById('code1').innerHTML = 'return head.data';
         document.getElementById('code2').innerHTML = '';
         document.getElementById('code3').innerHTML = '';
         document.getElementById('code4').innerHTML = '';
