@@ -60,9 +60,9 @@
   
     <div id="actions" class="panel">
     	<p id="create">Create</p>
-        <p id="search" onClick=searchGeneric()>Search</p>
+        <p id="search" class="execAction" onClick=searchGeneric()>Search</p>
 		<p id="insert">Insert</p>
-		<p id="remove" onClick=removeGeneric()>Remove</p>
+		<p id="remove" class="execAction" onClick=removeGeneric()>Remove</p>
     </div>
 
     <div id="actions-hide" class="panel-hide"><img src="img/arrow_white_right.png" title="show/hide actions panel"/></div>
@@ -97,6 +97,18 @@
         </div>
         
         <div class="insert action-menu-pullout">
+        	<!-- initially hidden -->
+        	<!-- for push top-->
+            <div id="pushtop-input" style="display:none;" class="new-menu-option"><input type="text" id="v-push-top-value" title="Enter an integer" autocomplete="off" value=53 /></div>
+            <div id="pushtop-go" style="display:none;" class="execAction coloured-menu-option" onclick=pushTop()><p>GO</p></div>
+            <div id="pushtop-err" style="display:none;" class="err"></div>
+        	<!-- for enqueue back -->
+			<div id="enqueueback-input" style="display:none;" class="new-menu-option"><input type="text" id="v-enqueue-back-value" title="Enter an integer" autocomplete="off" value=57 /></div>
+            <div id="enqueueback-go" style="display:none;" class="execAction coloured-menu-option" onclick=enqueueBack()><p>GO</p></div>
+            <div id="enqueueback-err" style="display:none;" class="err"></div>
+
+        	<!-- initially hidden end -->
+
         	<div id="insert-kth" class="execAction new-menu-option coloured-menu-option" onclick=insertModelingOpen("insertkth")><p> ----- Insert k-th -----</p>
               <div id="insertkth-input" class="new-menu-option">
                 <input type="text" id="v-insert-kth-value" title="Enter an integer to be inserted" autocomplete="off" value=90 />
@@ -238,7 +250,7 @@
 	//this viz-specific code
 	var bstWidget = new BST();
     var gw = bstWidget.getGraphWidget();
-    var activeStatus = "list";
+    bstWidget.setActiveStatus("list");
 	
 	//title changing
 	$('#title-LL').click(function() {
@@ -248,7 +260,7 @@
 		displayList();
 		hideStatusPanel();
 		hideCodetracePanel();
-		activeStatus = "list";
+		bstWidget.setActiveStatus("list");
 	});
 	$('#title-Stack').click(function() {
 		if(isPlaying) {	stop(); }
@@ -257,7 +269,7 @@
 		displayStack();
 		hideStatusPanel();
 		hideCodetracePanel();
-		activeStatus = "stack";
+		bstWidget.setActiveStatus("stack");
 	});
 	$('#title-Queue').click(function() {
 		if(isPlaying) {	stop(); }
@@ -266,7 +278,7 @@
 		displayQueue();
 		hideStatusPanel();
 		hideCodetracePanel();
-		activeStatus = "queue";
+		bstWidget.setActiveStatus("queue");
 	});
 	$('#title-DLL').click(function() {
 		if(isPlaying) {	stop(); }
@@ -288,6 +300,12 @@
 
 
 	function displayList(){
+		document.getElementById("enqueueback-input").style.display = "none";
+		document.getElementById("enqueueback-go").style.display = "none";
+		document.getElementById("enqueueback-err").style.display = "none";
+		document.getElementById("pushtop-input").style.display = "none";
+		document.getElementById("pushtop-go").style.display = "none";
+		document.getElementById("pushtop-err").style.display = "none";
 		document.getElementById("search-input").style.display = "";
 		document.getElementById("search-go").style.display = "";
 		document.getElementById("search-err").style.display = "";
@@ -301,10 +319,16 @@
 	}
 
 	function displayStack(){
+		document.getElementById("enqueueback-input").style.display = "none";
+		document.getElementById("enqueueback-go").style.display = "none";
+		document.getElementById("enqueueback-err").style.display = "none";
+		document.getElementById("pushtop-input").style.display = "";
+		document.getElementById("pushtop-go").style.display = "";
+		document.getElementById("pushtop-err").style.display = "";
 		document.getElementById("search-input").style.display = "none";
 		document.getElementById("search-go").style.display = "none";
 		document.getElementById("search-err").style.display = "none";
-		document.getElementById("insert-head").style.display = "";
+		document.getElementById("insert-head").style.display = "none";
 		document.getElementById("insert-tail").style.display = "none";
 		document.getElementById("insert-kth").style.display = "none";
 		document.getElementById("remove-head").style.display = "none";
@@ -315,11 +339,17 @@
 	}
 
 	function displayQueue(){
+		document.getElementById("enqueueback-input").style.display = "";
+		document.getElementById("enqueueback-go").style.display = "";
+		document.getElementById("enqueueback-err").style.display = "";
+		document.getElementById("pushtop-input").style.display = "none";
+		document.getElementById("pushtop-go").style.display = "none";
+		document.getElementById("pushtop-err").style.display = "none";
 		document.getElementById("search-input").style.display = "none";
 		document.getElementById("search-go").style.display = "none";
 		document.getElementById("search-err").style.display = "none";
 		document.getElementById("insert-head").style.display = "none";
-		document.getElementById("insert-tail").style.display = "";
+		document.getElementById("insert-tail").style.display = "none";
 		document.getElementById("insert-kth").style.display = "none";
 		document.getElementById("remove-head").style.display = "none";
 		document.getElementById("remove-tail").style.display = "none";
@@ -348,23 +378,23 @@
 		document.getElementById('remove').innerHTML = "Dequeue";
 	}
 	function searchGeneric(){
-		if(activeStatus=="list"){
+		if(bstWidget.getActiveStatus()=="list"){
 		}
-		else if(activeStatus=="stack"){
+		else if(bstWidget.getActiveStatus()=="stack"){
 			peekStack();
 		}
-		else if(activeStatus=="queue"){
+		else if(bstWidget.getActiveStatus()=="queue"){
 			peekQueue();
 		}
 	}
 
 	function removeGeneric(){
-		if(activeStatus=="list"){
+		if(bstWidget.getActiveStatus()=="list"){
 		}
-		else if(activeStatus=="stack"){
+		else if(bstWidget.getActiveStatus()=="stack"){
 			removeHead();
 		}
-		else if(activeStatus=="queue"){
+		else if(bstWidget.getActiveStatus()=="queue"){
 			removeHead();
 		}
 	}
@@ -466,13 +496,39 @@
 		}, 500)
     }
 
-    //stub functions for the things i created
+    function pushTop(){
+ 		if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-push-top-value').val();
+			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
+				$('#current-action').show();
+				$('#current-action p').html("Insert "+ input);
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}	
+		}, 500)
+    }
+
+    function enqueueBack(){
+    	if(isPlaying) {	stop(); }
+		setTimeout( function() {
+			var input = $('#v-enqueue-back-value').val();
+			if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
+				$('#current-action').show();
+				$('#current-action p').html("Insert "+ input);
+				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+				triggerRightPanels();
+				isPlaying = true;
+			}
+		}, 500)
+    }
+
 
  	function insertHead(){
  		if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-insert-head-value').val();
-			input = input.split(",");
 			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
 				$('#current-action').show();
 				$('#current-action p').html("Insert "+ input);
@@ -487,7 +543,6 @@
     	if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-insert-tail-value').val();
-			input = input.split(",");
 			if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
 				$('#current-action').show();
 				$('#current-action p').html("Insert "+ input);

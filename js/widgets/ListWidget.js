@@ -5,13 +5,15 @@
 var BST = function(){
   var self = this;
   var graphWidget = new GraphWidget();
-  var isAVL = false;
+  var activeStatus = "list";
+  var maxSize = 10;
+  var maxStackSize = 5;
 
   var valueRange = [1, 100]; // Range of valid values of BST vertexes allowed
   var maxHeightAllowed = 10;
 
   var initialArray = [15, 6, 23, 4, 7, 71, 5, 50];
-  var initialAvlArray = [15, 6, 50, 4, 7, 23, 71, 5];
+  var initialStackArray = [15, 6, 50, 4];
 
   /*
    * internalBst: Internal representation of BST in this object
@@ -33,90 +35,33 @@ var BST = function(){
   var vertexClassNumberCounter = 9;
   internalBst["root"] = null;
 
+  if(activeStatus=="stack") init(initialStackArray);
+  else init(initialArray);
+
+
+  this.getIsAVL = function(){
+    return isAVL;
+  }
   
-  init(initialArray);
+  this.setActiveStatus = function(newActiveStatus){
+    if(activeStatus != newActiveStatus){
+      clearScreen();
+      activeStatus = newActiveStatus;
+      if(activeStatus=="stack") init(initialStackArray);
+      else init(initialArray);
+    }
+  }
+
+  this.getActiveStatus = function(){
+    return activeStatus;
+  }
+
+  this.widgetRecalculatePosition = function(){
+    recalculatePosition();
+  }
 
   this.getGraphWidget = function(){
     return graphWidget;
-  }
-
-  /*
-   * @deprecated Use init(initArr)
-   */
-  function dummyInit(){
-    internalBst["root"] = 15;
-	internalBst[15] = {
-      "parent": null,
-      "leftChild": null,
-      "rightChild": 6,
-      "vertexClassNumber": 0
-    };
-	internalBst[6] = {
-      "parent": 15,
-      "leftChild": null,
-      "rightChild": 23,
-      "vertexClassNumber": 1
-    };
-	internalBst[23] = {
-      "parent": 6,
-      "leftChild": null,
-      "rightChild": 4,
-      "vertexClassNumber": 1
-    };
-	internalBst[4] = {
-      "parent": 23,
-      "leftChild": null,
-      "rightChild": 7,
-      "vertexClassNumber": 1
-    };
-	internalBst[7] = {
-      "parent": 4,
-      "leftChild": null,
-      "rightChild": 71,
-      "vertexClassNumber": 1
-    };
-	internalBst[71] = {
-      "parent": 7,
-      "leftChild": null,
-      "rightChild": 5,
-      "vertexClassNumber": 1
-    };
-	internalBst[5] = {
-      "parent": 71,
-      "leftChild": null,
-      "rightChild": 50,
-      "vertexClassNumber": 1
-    };
-	internalBst[50] = {
-      "parent": 5,
-      "leftChild": null,
-      "rightChild": null,
-      "vertexClassNumber": 1
-    };
-
-    recalculatePosition();
-
-    var key;
-
-    for(key in internalBst){
-      if(key == "root") continue;
-
-      var currentVertex = internalBst[key];
-      graphWidget.addVertex(currentVertex["cx"], currentVertex["cy"], key, currentVertex["vertexClassNumber"], true);
-    }
-
-    for(key in internalBst){
-      if(key == "root") continue;
-
-      var currentVertex = internalBst[key];
-      var parentVertex = internalBst[currentVertex["parent"]];
-      if(currentVertex["parent"] == null) continue;
-
-      graphWidget.addEdge(parentVertex["vertexClassNumber"], currentVertex["vertexClassNumber"], currentVertex["vertexClassNumber"], EDGE_TYPE_DE, 1, true);
-    }
-
-    amountVertex = 8;
-
   }
 
   this.generateRandom = function(){
@@ -147,9 +92,17 @@ var BST = function(){
   }
 
   this.generateRandomFixedSize = function(vertexText) {
-      if(vertexText>10){
-         $('#create-err').html("maximum allowed number of vertex is 10");
-         return false;
+      if(activeStatus=="stack"){
+        if(vertexText>maxStackSize){
+           $('#create-err').html("maximum allowed number of vertex is " + maxStackSize);
+           return false;
+        }
+      }
+      else{
+        if(vertexText>maxSize){
+           $('#create-err').html("maximum allowed number of vertex is " + maxSize);
+           return false;
+        }
       }
 
       var vertexAmt = vertexText;
@@ -165,9 +118,17 @@ var BST = function(){
 
   this.generateUserDefined = function(vertexTextArr){
       var vertexAmt = vertexTextArr.length;
-      if(vertexAmt>10){
-         $('#create-err').html("maximum allowed number of vertex is 10");
-         return false;
+      if(activeStatus=="stack"){
+        if(vertexAmt>maxStackSize){
+           $('#create-err').html("maximum allowed number of vertex is " + maxStackSize);
+           return false;
+        }
+      }
+      else{
+        if(vertexAmt>maxSize){
+           $('#create-err').html("maximum allowed number of vertex is " + maxSize);
+           return false;
+        }
       }
       var initArr = new Array();
       for(i = 0; i < vertexTextArr.length; i++){
@@ -398,8 +359,8 @@ this.insertArrKth= function(vertexTextArr,index){
       }
 
       // 4. check size
-      if(amountVertex>=10){
-        $('#insert-err').html("Sorry, maximum size is 10 ");
+      if(amountVertex>=maxSize){
+        $('#insert-err').html("Sorry, maximum size is " + maxSize);
         return false;
       }
 
@@ -628,9 +589,17 @@ this.insertArrHead= function(vertexTextArr){
       }
 
       // 4. check size
-      if(amountVertex>=10){
-        $('#insert-err').html("Sorry, maximum size is 10 ");
-        return false;
+      if(activeStatus=="stack"){
+        if(amountVertex>=maxStackSize){
+          $('#insert-err').html("Sorry, maximum size is " + maxStackSize);
+          return false;
+        }
+      }
+      else{
+        if(amountVertex>=maxSize){
+          $('#insert-err').html("Sorry, maximum size is " + maxSize);
+          return false;
+        }
       }
     
 
@@ -791,8 +760,8 @@ this.insertArrTail = function(vertexTextArr){
         return false;
       }
       // 4. check size
-      if(amountVertex>=10){
-        $('#insert-err').html("Sorry, maximum size is 10 ");
+      if(amountVertex>=maxSize){
+        $('#insert-err').html("Sorry, maximum size is " + maxSize);
         return false;
       }
     
@@ -1558,71 +1527,34 @@ this.insertArrTail = function(vertexTextArr){
 
 //modified recalculateposition
   function recalculatePosition(){
-    //calcHeight(internalBst["root"], 0);
     updatePosition(internalBst["root"]);
 
-    function calcHeight(currentVertex, currentHeight){
-      if(currentVertex == null) return;
-      //internalBst[currentVertex]["height"] = currentHeight;
-      calcHeight(internalBst[currentVertex]["leftChild"], currentHeight + 1);
-      calcHeight(internalBst[currentVertex]["rightChild"], currentHeight + 1);
-    }
 
     function updatePosition(currentVertex){
       if(currentVertex == null) return;
-
-      if(currentVertex == internalBst["root"]) internalBst[currentVertex]["cx"] = 20;
-      else{
-        var parentVertex = internalBst[currentVertex]["parent"]
-
-        
-          internalBst[currentVertex]["cx"] = internalBst[parentVertex]["cx"] + 70;
-        
+      //relayout vertical
+      if(activeStatus=="stack"){
+        if(currentVertex == internalBst["root"]) internalBst[currentVertex]["cy"] = 20;
+        else{
+          var parentVertex = internalBst[currentVertex]["parent"]
+            internalBst[currentVertex]["cy"] = internalBst[parentVertex]["cy"] + 70;
+        }
+          internalBst[currentVertex]["cx"] = 350;
       }
-        internalBst[currentVertex]["cy"] = 50;
-      //internalBst[currentVertex]["cy"] = 50 + 50*internalBst[currentVertex]["height"];
+      //relayout horizontal
+      else{
+        if(currentVertex == internalBst["root"]) internalBst[currentVertex]["cx"] = 20;
+        else{
+          var parentVertex = internalBst[currentVertex]["parent"];
+            internalBst[currentVertex]["cx"] = internalBst[parentVertex]["cx"] + 70;
+        }
+          internalBst[currentVertex]["cy"] = 50;
+      }
 
-      updatePosition(internalBst[currentVertex]["leftChild"]);
       updatePosition(internalBst[currentVertex]["rightChild"]);
     }
   }
 
-  //original recalculate position
-
-  // function recalculatePosition(){
-  //   calcHeight(internalBst["root"], 0);
-  //   updatePosition(internalBst["root"]);
-
-  //   function calcHeight(currentVertex, currentHeight){
-  //     if(currentVertex == null) return;
-  //     internalBst[currentVertex]["height"] = currentHeight;
-  //     calcHeight(internalBst[currentVertex]["leftChild"], currentHeight + 1);
-  //     calcHeight(internalBst[currentVertex]["rightChild"], currentHeight + 1);
-  //   }
-
-  //   function updatePosition(currentVertex){
-  //     if(currentVertex == null) return;
-
-  //     if(currentVertex == internalBst["root"]) internalBst[currentVertex]["cx"] = MAIN_SVG_WIDTH/2;
-  //     else{
-  //       var i;
-  //       var xAxisOffset = MAIN_SVG_WIDTH/2;
-  //       var parentVertex = internalBst[currentVertex]["parent"]
-  //       for(i = 0; i < internalBst[currentVertex]["height"]; i++){
-  //         xAxisOffset /= 2;
-  //       }
-
-  //       if(parseInt(currentVertex) > parseInt(parentVertex))
-  //         internalBst[currentVertex]["cx"] = internalBst[parentVertex]["cx"] + xAxisOffset;
-  //       else internalBst[currentVertex]["cx"] = internalBst[parentVertex]["cx"] - xAxisOffset;
-  //     }
-
-  //     internalBst[currentVertex]["cy"] = 50 + 50*internalBst[currentVertex]["height"];
-
-  //     updatePosition(internalBst[currentVertex]["leftChild"]);
-  //     updatePosition(internalBst[currentVertex]["rightChild"]);
-  //   }
-  // }
 
   function recalculateBalanceFactor(){
     balanceFactorRecursion(internalBst["root"]);

@@ -117,6 +117,18 @@
 	}
 	#insert-go p { padding: 5px 8px; }
 	#insert-err { padding: 5px 0px; }
+	#pushtop-input input{
+		width: 25px;
+		padding: 6px 8px 5px;
+	}
+	#pushtop-go p { padding: 5px 8px; }
+	#pushtop-err { padding: 5px 0px; }
+	#enqueueback-input input{
+		width: 25px;
+		padding: 6px 8px 5px;
+	}
+	#enqueueback-go p { padding: 5px 8px; }
+	#enqueueback-err { padding: 5px 0px; }
 		
 .remove { bottom: 65px; }
 	#remove-head p { padding: 5px 8px; }
