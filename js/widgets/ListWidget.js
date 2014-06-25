@@ -1606,6 +1606,150 @@ this.insertArrTail = function(vertexTextArr){
     return true;
   }
 
+
+  this.removeArrHeadDoublyList = function(){
+    var index = 0;
+    var vertexTextArr = [1];
+    var stateList = [];
+    var vertexTraversed = {};
+    var edgeTraversed = {};
+    var currentVertex = internalBst["root"];
+    var currentState = createState(internalBst);
+    var currentVertexClass;
+    var key;
+    var i;
+
+    currentState["status"] = "The current Linked List";
+    currentState["lineNo"] = 0;
+    stateList.push(currentState);
+
+      var vertexCheckBf;
+     
+      // Re-initialization
+      vertexTraversed = {};
+      edgeTraversed = {};
+      currentVertex = internalBst["root"];
+      currentState = createState(internalBst);
+
+      // Case 1: no child
+      if(internalBst[currentVertex]["rightChild"]==null){
+
+        //temp = head
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        currentState["status"] = "Vertex has no children. It is the only vertex";
+        currentState["lineNo"] = 1;
+        stateList.push(currentState);
+        //end
+
+
+        //head = head next
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        currentState["status"] = "Head points to next (which is null)";
+        currentState["lineNo"] = 2;
+        stateList.push(currentState);
+        //end
+      
+        // var parentVertex = internalBst[currentVertex]["parent"];
+
+       
+        // if(parentVertex !=null) internalBst[parentVertex]["rightChild"] = null;
+        // else internalBst["root"] = "null";
+
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+
+        //delete temp
+        delete internalBst[currentVertex];
+        delete vertexTraversed[currentVertex];
+        delete edgeTraversed[currentVertexClass];
+
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["status"] = "Remove first vertex";
+        currentState["lineNo"] = 3;
+        stateList.push(currentState);
+        
+        //end
+      }
+      else{
+        //has child
+        // temp =  head
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        currentState["status"] = "Vertex has a child";
+        currentState["lineNo"] = 1;
+        stateList.push(currentState);
+        //end
+      
+        var rightChildVertex = internalBst[currentVertex]["rightChild"];
+
+      
+
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        rightChildVertexClass = internalBst[rightChildVertex]["vertexClassNumber"];
+
+
+        //head = head.next
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        //edgeTraversed[rightChildVertexClass] = true;
+        currentState["el"][currentVertexClass]["state"] = EDGE_BLUE;
+        currentState["el"][currentVertexClass]["animateHighlighted"] = true;
+        currentState["status"] = "head points to next";
+        currentState["lineNo"] = 2;
+        stateList.push(currentState);
+        //end
+
+        internalBst["root"] = rightChildVertex;
+        internalBst[rightChildVertex]["parent"] = null;
+
+
+        //delete temp
+        delete internalBst[currentVertex];
+        delete vertexTraversed[currentVertex];
+        delete edgeTraversed[currentVertexClass];
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["status"] = "Delete vertex";
+        currentState["lineNo"] = 3;
+        stateList.push(currentState);
+        //end
+
+        //head.prev = null
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["status"] = "set head.prev to null";
+        currentState["lineNo"] = 4;
+        stateList.push(currentState);
+        //end
+
+        //relayout
+        recalculatePosition();
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["status"] = "Re-layout the list";
+        currentState["lineNo"] = 0;
+        stateList.push(currentState);
+        //end
+    }
+
+    currentState = createState(internalBst);
+    currentState["status"] = "Removal of first vertex completed";
+    currentState["lineNo"] = 0;
+    stateList.push(currentState);
+    
+
+    graphWidget.startAnimation(stateList);
+ 
+    populatePseudocode(5);
+    amountVertex--;
+    return true;
+  }
+
   this.removeArrTail = function(){
     var vertexTextArr = [1];
     var stateList = [];
@@ -2247,7 +2391,12 @@ this.insertArrTail = function(vertexTextArr){
         document.getElementById('code1').innerHTML = 'temp = head';
         document.getElementById('code2').innerHTML = 'head = head.next';
         document.getElementById('code3').innerHTML = 'delete temp';
-        document.getElementById('code4').innerHTML = '';
+        if(activeStatus == "doublylist"){
+           document.getElementById('code4').innerHTML = 'head.prev = null';
+         }
+         else{
+            document.getElementById('code4').innerHTML = '';
+          }
         document.getElementById('code5').innerHTML = '';
         document.getElementById('code6').innerHTML = '';
         document.getElementById('code7').innerHTML = '';
