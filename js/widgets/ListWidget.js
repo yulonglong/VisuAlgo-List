@@ -1990,7 +1990,7 @@ this.removeArrTailDoublyList = function(){
       delete edgeTraversed[nextVertexClass];
        
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_BLUE_FILL;
       currentState["status"] = "delete last vertex";
       currentState["lineNo"] = 4;
       stateList.push(currentState);
