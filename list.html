@@ -106,9 +106,11 @@
 			<div id="enqueueback-input" style="display:none;" class="new-menu-option"><input type="text" id="v-enqueue-back-value" title="Enter an integer" autocomplete="off" value=57 /></div>
             <div id="enqueueback-go" style="display:none;" class="execAction coloured-menu-option" onclick=enqueueBack()><p>GO</p></div>
             <div id="enqueueback-err" style="display:none;" class="err"></div>
-
+      
         	<!-- initially hidden end -->
 
+
+            <!-- for original linked list -->
         	<div id="insert-kth" class="execAction new-menu-option coloured-menu-option" onclick=insertModelingOpen("insertkth")><p> ----- Insert k-th -----</p>
               <div id="insertkth-input" class="new-menu-option">
                 <input type="text" id="v-insert-kth-value" title="Enter an integer to be inserted" autocomplete="off" value=90 />
@@ -132,7 +134,7 @@
             </div>
 
             <div id="insert-err" class="err"></div>
-
+            <!-- for original linked list end -->
 
             <!-- <div id="insert-input" class="new-menu-option"><input type="text" id="v-insert" title="Enter an integer or comma-separated array of integers" autocomplete="off" value=20 /></div>
  			<div id="insert-head" class="execAction new-menu-option coloured-menu-option" onClick=insertHead()><p>Insert to Head</p></div>
@@ -145,7 +147,7 @@
         <div class="remove action-menu-pullout">
        		<div id="remove-head" class="execAction new-menu-option coloured-menu-option" onClick=removeHead()><p>Remove Head</p></div>
             <div id="remove-tail" class="execAction new-menu-option coloured-menu-option" onClick=removeTail()><p>Remove Tail</p></div>
-            <div id="remove-kth" class="execAction new-menu-option coloured-menu-option" onclick=removeModelingOpen("removekth")><p>remove k-th</p>
+            <div id="remove-kth" class="execAction new-menu-option coloured-menu-option" onclick=removeModelingOpen("removekth")><p>Remove k-th</p>
               <div id="removekth-input" class="new-menu-option">
                 <input type="text" id="v-remove-kth" title="Enter the index to be removed" autocomplete="off" value=2 />
                 <div id="removekth-go" class="execAction coloured-menu-option" onClick=removeKth() title="Remove k-th"><p>GO</p></div>
@@ -287,6 +289,7 @@
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
+        bstWidget.setActiveStatus("doublylist");
 	});
 	$('#title-Deque').click(function() {
 		if(isPlaying) {	stop(); }
@@ -295,6 +298,7 @@
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
+        bstWidget.setActiveStatus("deque");
 	});
 
 
@@ -334,7 +338,6 @@
 		document.getElementById("remove-head").style.display = "none";
 		document.getElementById("remove-tail").style.display = "none";
 		document.getElementById("remove-kth").style.display = "none";
-		changeTextQueue();
 		changeTextStack();
 	}
 
@@ -377,6 +380,7 @@
 		document.getElementById('insert').innerHTML = "Enqueue";
 		document.getElementById('remove').innerHTML = "Dequeue";
 	}
+
 	function searchGeneric(){
 		if(bstWidget.getActiveStatus()=="list"){
 		}
@@ -529,13 +533,24 @@
  		if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-insert-head-value').val();
-			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
-				$('#current-action').show();
-				$('#current-action p').html("Insert "+ input);
-				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
-				triggerRightPanels();
-				isPlaying = true;
-			}	
+            if(bstWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&bstWidget.insertArrHeadDoublyList(input)) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Insert "+ input);
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }   
+            }
+            else{
+    			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
+    				$('#current-action').show();
+    				$('#current-action p').html("Insert "+ input);
+    				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+    				triggerRightPanels();
+    				isPlaying = true;
+    			}	
+            }
 		}, 500)
     }
 

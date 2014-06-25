@@ -1,6 +1,7 @@
 // @author  Ivan Reinaldo
 // Defines a BST object; keeps implementation of BST internally and interact with GraphWidget to display BST visualizations
 // Also includes AVL tree
+var BACK_EDGE_CONST = 5000;
 
 var BST = function(){
   var self = this;
@@ -154,7 +155,7 @@ var BST = function(){
     currentState = createState(internalBst, vertexTraversed, edgeTraversed);
     currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
     currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
-    currentState["status"] = "return head.data";
+    currentState["status"] = "return " + currentVertex;
     currentState["lineNo"] = 1;
     stateList.push(currentState);
 
@@ -715,6 +716,184 @@ this.insertArrHead= function(vertexTextArr){
     return true;
   }
 
+
+
+this.insertArrHeadDoublyList= function(vertexTextArr){
+    var stateList = [];
+    var vertexTraversed = {};
+    var edgeTraversed = {};
+    var currentVertex = internalBst["root"];
+    var currentState  = {};
+    var key;
+    var i;
+
+    // currentState["status"] = "The Current Linked List";
+    // currentState["lineNo"] = 0;
+    // stateList.push(currentState);
+
+    // Loop through all array values and...
+
+    var tempInternalBst = deepCopy(internalBst); // Use this to simulate internal insertion
+    
+      var vt = parseInt(vertexTextArr);
+
+      // 1. Check whether value is number
+      if(isNaN(vt)){
+        $('#insert-err').html("Please fill in a number or comma-separated array of numbers!");
+        return false;
+      }
+
+      // 2. No duplicates allowed. Also works if more than one similar value are inserted
+      if(tempInternalBst[vt] != null){
+        $('#insert-err').html("No duplicate vertex allowed!");
+        return false;
+      }
+
+      // 3. Check range
+      if(parseInt(vt) < valueRange[0] || parseInt(vt) > valueRange[1]){
+        $('#insert-err').html("Sorry, only values between " + valueRange[0] + " and " + valueRange[1] + " can be inserted.");
+        return false;
+      }
+
+      // 4. check size
+      if(activeStatus=="stack"){
+        if(amountVertex>=maxStackSize){
+          $('#insert-err').html("Sorry, maximum size is " + maxStackSize);
+          return false;
+        }
+      }
+      else{
+        if(amountVertex>=maxSize){
+          $('#insert-err').html("Sorry, maximum size is " + maxSize);
+          return false;
+        }
+      }
+    
+
+   
+
+      var vertexText = parseInt(vertexTextArr);
+
+      // Re-initialization
+      vertexTraversed = {};
+      edgeTraversed = {};
+      currentVertex = null;
+      if(amountVertex>=1){
+        currentState = createState(internalBst);
+      }
+      else{
+        currentState = {};
+      }
+
+      // Begin insertion
+
+      // First, update internal representation
+
+      internalBst[parseInt(vertexText)] = {
+        "leftChild": null,
+        "rightChild": null,
+        "vertexClassNumber": vertexClassNumberCounter++
+      };
+
+      //modified this part for linked list insertion
+      var newNode = parseInt(vertexText);
+
+      internalBst[newNode]["cx"] = 20;
+      internalBst[newNode]["cy"] = 120;
+      //if linked list is empty
+      amountVertex++;
+      if(amountVertex>1){
+        var tempChild = internalBst["root"];
+        internalBst[newNode]["rightChild"] = tempChild;
+        internalBst[tempChild]["parent"] = newNode;
+        internalBst["root"] = newNode;
+      } 
+      else {
+        internalBst["root"] = newNode;
+      }
+
+      // Then, draw edge
+      var newNodeVertexClass = internalBst[parseInt(vertexText)]["vertexClassNumber"];
+
+
+      if(amountVertex>1){
+          //Vertex temp = temp Vertex(input)
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["el"][newNodeVertexClass]["state"] = OBJ_HIDDEN;
+          currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["state"] = OBJ_HIDDEN;
+          
+          currentState["status"] = "create node";
+          currentState["lineNo"] = 1;
+          stateList.push(currentState);
+          //end
+
+         //temp.next = head
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          var edgeHighlighted = internalBst[newNode]["vertexClassNumber"];
+          currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
+          currentState["el"][edgeHighlighted]["state"] = EDGE_HIGHLIGHTED;
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["state"] = OBJ_HIDDEN;
+          currentState["status"] = "So temp.next points to head";
+          currentState["lineNo"] = 2;
+          stateList.push(currentState);
+          //end
+      }
+      else{
+           //Vertex temp = temp Vertex(input)
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["status"] = "create node";
+          currentState["lineNo"] = 1;
+          stateList.push(currentState);
+          //end
+
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["status"] = "head is null, temp.next is null"
+          currentState["lineNo"] = 2;
+          stateList.push(currentState);
+      }
+
+      //temp.next.prev = temp
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["state"] = EDGE_HIGHLIGHTED;
+      currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["animateHighlighted"] = true;
+      currentState["status"] = "set prev pointer";
+      currentState["lineNo"] = 3;
+      stateList.push(currentState);
+      //end
+
+      //head = temp
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["status"] = "Head points to temp"
+      currentState["lineNo"] = 4;
+      stateList.push(currentState);
+      //end
+      
+      recalculatePosition();
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["status"] = "Re-layout the linked list";
+      currentState["lineNo"] = 0;
+      stateList.push(currentState);
+
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["status"] = vertexText + " has been inserted!"
+      currentState["lineNo"] = 0;
+      stateList.push(currentState);
+
+    
+
+    graphWidget.startAnimation(stateList);
+ 
+    populatePseudocode(9);
+  
+    return true;
+  }
 
 
 this.insertArrTail = function(vertexTextArr){
@@ -1441,6 +1620,9 @@ this.insertArrTail = function(vertexTextArr){
       if(key == "root") continue;
       if(key == internalBst["root"]) continue;
       var parentVertex = internalBst[key]["parent"];
+      if(activeStatus=="doublylist"){
+        graphWidget.addEdge(internalBst[key]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"]+BACK_EDGE_CONST, EDGE_TYPE_DE, 1, true);
+      }
       graphWidget.addEdge(internalBst[parentVertex]["vertexClassNumber"], internalBst[key]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"], EDGE_TYPE_DE, 1, true);
     }
   }
@@ -1453,6 +1635,7 @@ this.insertArrTail = function(vertexTextArr){
     for(key in internalBst){
       if(key == "root") continue;
       graphWidget.removeEdge(internalBst[key]["vertexClassNumber"]);
+       graphWidget.removeEdge(internalBst[key]["vertexClassNumber"]+BACK_EDGE_CONST);
     }
 
     for(key in internalBst){
@@ -1500,6 +1683,20 @@ this.insertArrTail = function(vertexTextArr){
 
       if(internalBstObject[key]["rightChild"] == null) continue;
 
+      //add an edge for doubly linked list
+      if(activeStatus == "doublylist"){
+          parentChildEdgeId = internalBstObject[key]["vertexClassNumber"]+BACK_EDGE_CONST;
+          state["el"][parentChildEdgeId] = {};
+
+          state["el"][parentChildEdgeId]["vertexA"] = internalBstObject[internalBstObject[key]["rightChild"]]["vertexClassNumber"];
+          state["el"][parentChildEdgeId]["vertexB"] = internalBstObject[key]["vertexClassNumber"];
+          state["el"][parentChildEdgeId]["type"] = EDGE_TYPE_DE;
+          state["el"][parentChildEdgeId]["weight"] = 1;
+          state["el"][parentChildEdgeId]["state"] = EDGE_DEFAULT;
+          state["el"][parentChildEdgeId]["animateHighlighted"] = false;
+      }
+      //end
+
       parentChildEdgeId = internalBstObject[key]["vertexClassNumber"];
 
       state["el"][parentChildEdgeId] = {};
@@ -1510,6 +1707,8 @@ this.insertArrTail = function(vertexTextArr){
       state["el"][parentChildEdgeId]["weight"] = 1;
       state["el"][parentChildEdgeId]["state"] = EDGE_DEFAULT;
       state["el"][parentChildEdgeId]["animateHighlighted"] = false;
+
+      
     }
 
     for(key in vertexTraversed){
@@ -1655,15 +1854,16 @@ this.insertArrTail = function(vertexTextArr){
         document.getElementById('code6').innerHTML = '';
         document.getElementById('code7').innerHTML = '';
         break;
-    case 9: // predecessor
-        document.getElementById('code1').innerHTML = '';
-        document.getElementById('code2').innerHTML = '';
-        document.getElementById('code3').innerHTML = '';
-        document.getElementById('code4').innerHTML = '';
+    case 9: // insert head doubly
+        document.getElementById('code1').innerHTML = 'Vertex temp = new Vertex(input)';
+        document.getElementById('code2').innerHTML = 'temp.next = head';
+        document.getElementById('code3').innerHTML = 'temp.next.prev = temp';
+        document.getElementById('code4').innerHTML = 'head = temp';
         document.getElementById('code5').innerHTML = '';
         document.getElementById('code6').innerHTML = '';
         document.getElementById('code7').innerHTML = '';
         break;
     }
+
   }
 }
