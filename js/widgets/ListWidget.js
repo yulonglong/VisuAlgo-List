@@ -564,10 +564,10 @@ this.insertArrKthDoublyList= function(vertexTextArr,index){
 
      //check if it is insert at index 0 / insert head
     if(index==0){
-      return this.insertArrHead(vertexTextArr);
+      return this.insertArrHeadDoublyList(vertexTextArr);
     }
     if(index==amountVertex){
-      return this.insertArrTail(vertexTextArr);
+      return this.insertArrTailDoublyList(vertexTextArr);
     }
 
     currentState["status"] = "The current Linked List";
@@ -2176,30 +2176,13 @@ this.insertArrTail = function(vertexTextArr){
       updatePosition(internalBst[currentVertex]["rightChild"]);
     }
   }
-
-
-  function recalculateBalanceFactor(){
-    balanceFactorRecursion(internalBst["root"]);
-
-    function balanceFactorRecursion(vertexText){
-      if(vertexText == null) return -1;
-
-      var balanceFactorHeightLeft = balanceFactorRecursion(internalBst[vertexText]["leftChild"]);
-      var balanceFactorHeightRight = balanceFactorRecursion(internalBst[vertexText]["rightChild"]);
-
-      internalBst[vertexText]["balanceFactorHeight"] = Math.max(balanceFactorHeightLeft, balanceFactorHeightRight) + 1;
-      internalBst[vertexText]["balanceFactor"] = balanceFactorHeightLeft - balanceFactorHeightRight;
-
-      return internalBst[vertexText]["balanceFactorHeight"];
-    }
-  }
   
   function populatePseudocode(act) {
     switch (act) {
       case 0: // Insert
         document.getElementById('code1').innerHTML = 'Vertex temp1 = head';
         document.getElementById('code2').innerHTML = 'while (--k!=0)';
-        document.getElementById('code3').innerHTML = '&nbsp&nbspprev = temp1.next';
+        document.getElementById('code3').innerHTML = '&nbsp&nbsptemp1 = temp1.next';
         document.getElementById('code4').innerHTML = 'Vertex temp2 = temp1.next';
         document.getElementById('code5').innerHTML = 'Vertex newVertex = new Vertex(input)';
          if(activeStatus == "doublylist"){
