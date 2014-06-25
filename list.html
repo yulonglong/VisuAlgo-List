@@ -558,13 +558,25 @@
     	if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-insert-tail-value').val();
-			if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
-				$('#current-action').show();
-				$('#current-action p').html("Insert "+ input);
-				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
-				triggerRightPanels();
-				isPlaying = true;
-			}
+            if(bstWidget.getActiveStatus()=="doublylist"){
+                 if((mode=="exploration")&&bstWidget.insertArrTailDoublyList(input)) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Insert "+ input);
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+            }
+            else{
+                if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Insert "+ input);
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+            }
+			
 		}, 500)
     }
 
