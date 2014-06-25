@@ -639,13 +639,25 @@
     function removeTail(){
 		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			if((mode=="exploration")&&bstWidget.removeArrTail()) {
-				$('#current-action').show();
-				$('#current-action p').html("Remove Tail");
-				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
-				triggerRightPanels();
-				isPlaying = true;
-			}
+             if(bstWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&bstWidget.removeArrTailDoublyList()) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Remove Tail");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+             }
+             else{
+                if((mode=="exploration")&&bstWidget.removeArrTail()) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Remove Tail");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+             }
+			
 		}, 500);
     }
 

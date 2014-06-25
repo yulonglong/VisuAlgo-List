@@ -1907,6 +1907,108 @@ this.insertArrTail = function(vertexTextArr){
   }
 
 
+this.removeArrTailDoublyList = function(){
+    var vertexTextArr = [1];
+    var stateList = [];
+    var vertexTraversed = {};
+    var edgeTraversed = {};
+    var currentVertex = internalBst["root"];
+    var nextVertex = internalBst[currentVertex]["rightChild"];
+    var currentState = createState(internalBst);
+    var currentVertexClass;
+    var nextVertexClass;
+    var key;
+    var i;
+
+    if(amountVertex==1){
+      return this.removeArrHead();
+    }
+
+
+      // Find vertex
+      while(true){
+       
+
+        if(internalBst[nextVertex]["rightChild"]!=null) {
+          nextVertex = internalBst[nextVertex]["rightChild"];
+          currentVertex = internalBst[currentVertex]["rightChild"];
+        }
+        else break;
+      }
+
+      currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+      nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+
+      //Vertex temp = tail
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      
+      currentState["vl"][nextVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["status"] = "set temp to tail";
+      currentState["lineNo"] = 1;
+      stateList.push(currentState);
+      //end
+
+      //Vertex temp = tail
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      
+      currentState["vl"][nextVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["el"][currentVertexClass+BACK_EDGE_CONST]["state"] = EDGE_HIGHLIGHTED;
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["status"] = "set tail to tail.prev";
+      currentState["lineNo"] = 2;
+      stateList.push(currentState);
+      //end
+
+    
+     
+      //tail.next = null
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      //prev highlight
+      currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+      nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+      currentState["el"][currentVertexClass]["state"] = OBJ_HIDDEN;
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_BLUE_FILL;
+      //temp hightlight
+      nextVertexClass = internalBst[nextVertex]["vertexClassNumber"];
+      currentState["vl"][nextVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      vertexTraversed[currentVertex] = true;
+      
+      //status
+      currentState["status"] = "Set last vertex.next to null";
+      currentState["lineNo"] = 3;
+      stateList.push(currentState);
+      //end
+
+      var parentVertex = internalBst[nextVertex]["parent"];
+      if(parentVertex !=null) internalBst[parentVertex]["rightChild"] = null;
+      else internalBst["root"] = null;
+
+      
+      //delete temp
+      delete internalBst[nextVertex];
+      delete vertexTraversed[nextVertex];
+      delete edgeTraversed[nextVertexClass];
+       
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      currentState["status"] = "delete last vertex";
+      currentState["lineNo"] = 4;
+      stateList.push(currentState);
+      //end
+
+      currentState = createState(internalBst);
+      currentState["status"] = "Removal of last vertex completed";
+      currentState["lineNo"] = 0;
+      stateList.push(currentState);
+    
+
+    graphWidget.startAnimation(stateList);
+ 
+    populatePseudocode(8);
+    amountVertex--;
+    return true;
+  }
+
   this.removeArrKth = function(vertexTextArr){
     var stateList = [];
     var vertexTraversed = {};
@@ -2419,11 +2521,11 @@ this.insertArrTail = function(vertexTextArr){
         document.getElementById('code6').innerHTML = 'delete temp';
         document.getElementById('code7').innerHTML = '';
         break;
-    case 8:
-        document.getElementById('code1').innerHTML = '';
-        document.getElementById('code2').innerHTML = '';
-        document.getElementById('code3').innerHTML = '';
-        document.getElementById('code4').innerHTML = '';
+    case 8: //remove tail doubly list
+        document.getElementById('code1').innerHTML = 'temp = tail';
+        document.getElementById('code2').innerHTML = 'tail = tail.prev';
+        document.getElementById('code3').innerHTML = 'tail.next = null';
+        document.getElementById('code4').innerHTML = 'delete temp';
         document.getElementById('code5').innerHTML = '';
         document.getElementById('code6').innerHTML = '';
         document.getElementById('code7').innerHTML = '';
