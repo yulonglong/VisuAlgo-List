@@ -586,13 +586,24 @@
 			var input = $('#v-insert-kth-value').val();
 			var index = $('#v-insert-kth').val();
 			//input = input.split(",");
-			if((mode=="exploration")&&bstWidget.insertArrKth(input,index)) {
-				$('#current-action').show();
-				$('#current-action p').html("Insert "+ input);
-				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
-				triggerRightPanels();
-				isPlaying = true;
-			}
+             if(bstWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&bstWidget.insertArrKthDoublyList(input,index)) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Insert "+ input);
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+             }
+             else{
+    			if((mode=="exploration")&&bstWidget.insertArrKth(input,index)) {
+    				$('#current-action').show();
+    				$('#current-action p').html("Insert "+ input);
+    				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+    				triggerRightPanels();
+    				isPlaying = true;
+    			}
+            }
 		}, 500)
     }
 
