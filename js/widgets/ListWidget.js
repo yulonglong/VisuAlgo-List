@@ -384,7 +384,7 @@ this.insertArrKth= function(vertexTextArr,index){
       currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
       currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
       vertexTraversed[currentVertex] = true;
-      currentState["status"] = "set prev to head";
+      currentState["status"] = "set temp1 to head";
       currentState["lineNo"] = 1;
       stateList.push(currentState);
       //end
@@ -505,7 +505,7 @@ this.insertArrKth= function(vertexTextArr,index){
       currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
       currentState["el"][currentVertexClass]["animateHighlighted"] = true;
       currentState["el"][newNodeVertexClass]["state"] = OBJ_HIDDEN;
-      currentState["status"] = "prev.next points to newVertex";
+      currentState["status"] = "temp1.next points to newVertex";
       currentState["lineNo"] = 6;
       stateList.push(currentState);
       //end
@@ -519,7 +519,7 @@ this.insertArrKth= function(vertexTextArr,index){
       currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
       currentState["el"][newNodeVertexClass]["state"] = EDGE_RED;
       currentState["el"][newNodeVertexClass]["animateHighlighted"] = true;
-      currentState["status"] = "newVertex.next points to temp";
+      currentState["status"] = "newVertex.next points to temp2";
       currentState["lineNo"] = 7;
       stateList.push(currentState);
       //end
@@ -551,6 +551,296 @@ this.insertArrKth= function(vertexTextArr,index){
     return true;
   }
 
+
+this.insertArrKthDoublyList= function(vertexTextArr,index){
+    var stateList = [];
+    var vertexTraversed = {};
+    var edgeTraversed = {};
+    var currentVertex = internalBst["root"];
+    var currentState = createState(internalBst);
+    var currentVertexClass;
+    var key;
+    var i;
+
+     //check if it is insert at index 0 / insert head
+    if(index==0){
+      return this.insertArrHead(vertexTextArr);
+    }
+    if(index==amountVertex){
+      return this.insertArrTail(vertexTextArr);
+    }
+
+    currentState["status"] = "The current Linked List";
+    currentState["lineNo"] = 0;
+    stateList.push(currentState);
+
+    // Check whether input is array
+    // if(Object.prototype.toString.call(vertexTextArr) != '[object Array]'){
+    //   $('#insert-err').html("Please fill in a number or comma-separated array of numbers!");
+    //   return false;
+    // }
+
+    // Loop through all array values and...
+
+    var tempInternalBst = deepCopy(internalBst); // Use this to simulate internal insertion
+
+
+    //index checking start
+    if(isNaN(index)){
+      $('#insert-err').html("Please fill in a number");
+      return false;
+    }
+    if(index>amountVertex){
+       $('#insert-err').html("Please enter a valid index!");
+       return false;
+    }
+    if(index<0){
+       $('#insert-err').html("Please enter a valid index!");
+       return false;
+    }
+    //end of index checking
+     
+    
+    //for(i = 0; i < vertexTextArr.length; i++){
+      var vt = parseInt(vertexTextArr);
+
+      // 1. Check whether value is number
+      if(isNaN(vt)){
+        $('#insert-err').html("Please fill in a number or comma-separated array of numbers!");
+        return false;
+      }
+
+      // 2. No duplicates allowed. Also works if more than one similar value are inserted
+      if(tempInternalBst[vt] != null){
+        $('#insert-err').html("No duplicate vertex allowed!");
+        return false;
+      }
+
+      // 3. Check range
+      if(parseInt(vt) < valueRange[0] || parseInt(vt) > valueRange[1]){
+        $('#insert-err').html("Sorry, only values between " + valueRange[0] + " and " + valueRange[1] + " can be inserted.");
+        return false;
+      }
+
+      // 4. check size
+      if(amountVertex>=maxSize){
+        $('#insert-err').html("Sorry, maximum size is " + maxSize);
+        return false;
+      }
+
+    //}
+
+
+      var vertexText = parseInt(vertexTextArr);
+
+      // Re-initialization
+      vertexTraversed = {};
+      edgeTraversed = {};
+      currentVertex = internalBst["root"];
+      currentState = createState(internalBst);
+      if (index==0){
+        currentVertex = null;
+      }
+
+      //Vertex prev = head
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      vertexTraversed[currentVertex] = true;
+      currentState["status"] = "set temp1 to head";
+      currentState["lineNo"] = 1;
+      stateList.push(currentState);
+      //end
+
+      // Find parent
+      // while(currentVertex != vertexText && currentVertex != null){
+      for(j=0;j<index-1;j++){
+        //while (--k!=0)
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        vertexTraversed[currentVertex] = true;
+        currentState["status"] = "decrement k, index specified has not been reached, " + "(k = "+ (index-1-j) +")";
+        currentState["lineNo"] = 2;
+        stateList.push(currentState);
+        //end
+
+        var nextVertex;
+         nextVertex = internalBst[currentVertex]["rightChild"];
+
+        if(nextVertex == null) break;
+        else currentVertex = nextVertex;
+
+        //prev = prev.next
+        parentVertex = internalBst[currentVertex]["parent"];
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        var edgeHighlighted = internalBst[parentVertex]["vertexClassNumber"];
+        edgeTraversed[edgeHighlighted] = true;
+        currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
+        currentState["el"][edgeHighlighted]["state"] = EDGE_TRAVERSED;
+        currentState["status"] = "points to next vertex";
+        currentState["lineNo"] = 3;
+        stateList.push(currentState);
+        //end
+      }
+
+
+      if(currentVertex!=null){
+        //additional animation for the last vertex visited
+        //while(--k!=0)
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        vertexTraversed[currentVertex] = true;
+        currentState["status"] = "decrement k, k is 0, continue insertion";
+        currentState["lineNo"] = 2;
+        stateList.push(currentState);
+        //end
+        //end of additional animation
+       }
+
+      // Begin insertion
+
+      // First, update internal representation
+
+     
+
+      //var newNodeVertexClass = internalBst[tempChild]["vertexClassNumber"];
+
+      //Vertex temp = prev.next
+      tempVertex = internalBst[currentVertex]["rightChild"];
+      tempVertexClass = internalBst[tempVertex]["vertexClassNumber"];
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][currentVertexClass]["animateHighlighted"] = true;
+      edgeTraversed[currentVertexClass] = true;
+      currentState["status"] = "index specified is found, keep track of the next vertex";
+      currentState["lineNo"] = 4;
+      stateList.push(currentState);
+      //end
+
+
+
+
+      internalBst[parseInt(vertexText)] = {
+        "leftChild": null,
+        "rightChild": null,
+        "vertexClassNumber": vertexClassNumberCounter++
+      };
+      amountVertex++;
+      //modified this part for linked list insertion
+      var newNode = parseInt(vertexText);
+      newNodeVertexClass = internalBst[parseInt(vertexText)]["vertexClassNumber"];
+      var tempChild;
+
+      internalBst[newNode]["cx"] = internalBst[tempVertex]["cx"];
+      internalBst[newNode]["cy"] = internalBst[tempVertex]["cy"] + 70;
+
+      
+   
+      //vertex newVertex =  new Vertex(input)
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["status"] = "create new vertex";
+      currentState["lineNo"] = 5;
+      stateList.push(currentState);
+      edgeTraversed[newNodeVertexClass] = true;
+      //end
+    
+      //RELINK THE POINTERs
+      internalBst[newNode]["rightChild"] = tempVertex;
+      internalBst[tempVertex]["parent"] = newNode;
+      //END RELINKING
+      
+
+      //newVertex.next = temp
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][newNodeVertexClass]["state"] = EDGE_RED;
+      currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["state"] = OBJ_HIDDEN;
+      currentState["status"] = "newVertex.next points to temp2";
+      currentState["lineNo"] = 6;
+      stateList.push(currentState);
+      //end
+
+      //temp2.prev = newVertex
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][newNodeVertexClass]["state"] = EDGE_RED;
+      currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["state"] = EDGE_GREEN;
+      currentState["el"][currentVertexClass+BACK_EDGE_CONST]["state"] = OBJ_HIDDEN;
+      currentState["status"] = "temp2 prev points to newVertex";
+      currentState["lineNo"] = 6;
+      stateList.push(currentState);
+      //end
+
+      internalBst[currentVertex]["rightChild"] = newNode;
+      internalBst[newNode]["parent"] = currentVertex;
+
+      //temp1.next  = newVertex
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][currentVertexClass+BACK_EDGE_CONST]["state"] = OBJ_HIDDEN;
+      currentState["status"] = "temp1.next points to newVertex";
+      currentState["lineNo"] = 7;
+      stateList.push(currentState);
+      //end
+
+      //prev.next  = newVertex
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["el"][currentVertexClass]["state"] = EDGE_TRAVERSED;
+      currentState["el"][currentVertexClass+BACK_EDGE_CONST]["state"] = EDGE_RED;
+      currentState["status"] = "newVertex.prev points to temp1";
+      currentState["lineNo"] = 7;
+      stateList.push(currentState);
+      //end
+
+
+      recalculatePosition();
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentState["vl"][currentVertexClass]["state"] =  VERTEX_HIGHLIGHTED;
+      currentState["vl"][newNodeVertexClass]["state"] =  VERTEX_RED_FILL;
+      currentState["el"][newNodeVertexClass]["state"] = EDGE_RED;
+      currentState["vl"][tempVertexClass]["state"] =  VERTEX_GREEN_FILL;
+      currentState["status"] = "Re-layout the linked list. " + vertexText + " has been inserted!"
+      currentState["lineNo"] = 0;
+
+      stateList.push(currentState);
+
+      // End State
+      currentState = createState(internalBst);
+      currentState["status"] = "Insert " + vertexText + " has been completed."
+      currentState["lineNo"] = 0;
+      stateList.push(currentState);
+
+    
+
+    graphWidget.startAnimation(stateList);
+ 
+    populatePseudocode(0);
+  
+    return true;
+  }
 
 this.insertArrHead= function(vertexTextArr){
     var stateList = [];
@@ -1749,10 +2039,11 @@ this.insertArrTail = function(vertexTextArr){
       if(key == "root") continue;
       if(key == internalBst["root"]) continue;
       var parentVertex = internalBst[key]["parent"];
+      
+      graphWidget.addEdge(internalBst[parentVertex]["vertexClassNumber"], internalBst[key]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"], EDGE_TYPE_DE, 1, true);
       if(activeStatus=="doublylist"){
         graphWidget.addEdge(internalBst[key]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"]+BACK_EDGE_CONST, EDGE_TYPE_DE, 1, true);
       }
-      graphWidget.addEdge(internalBst[parentVertex]["vertexClassNumber"], internalBst[key]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"], EDGE_TYPE_DE, 1, true);
     }
   }
 
@@ -1763,8 +2054,9 @@ this.insertArrTail = function(vertexTextArr){
 
     for(key in internalBst){
       if(key == "root") continue;
+      graphWidget.removeEdge(internalBst[key]["vertexClassNumber"]+BACK_EDGE_CONST);
       graphWidget.removeEdge(internalBst[key]["vertexClassNumber"]);
-       graphWidget.removeEdge(internalBst[key]["vertexClassNumber"]+BACK_EDGE_CONST);
+       
     }
 
     for(key in internalBst){
@@ -1812,6 +2104,19 @@ this.insertArrTail = function(vertexTextArr){
 
       if(internalBstObject[key]["rightChild"] == null) continue;
 
+      
+
+      parentChildEdgeId = internalBstObject[key]["vertexClassNumber"];
+
+      state["el"][parentChildEdgeId] = {};
+
+      state["el"][parentChildEdgeId]["vertexA"] = internalBstObject[key]["vertexClassNumber"];
+      state["el"][parentChildEdgeId]["vertexB"] = internalBstObject[internalBstObject[key]["rightChild"]]["vertexClassNumber"];
+      state["el"][parentChildEdgeId]["type"] = EDGE_TYPE_DE;
+      state["el"][parentChildEdgeId]["weight"] = 1;
+      state["el"][parentChildEdgeId]["state"] = EDGE_DEFAULT;
+      state["el"][parentChildEdgeId]["animateHighlighted"] = false;
+
       //add an edge for doubly linked list
       if(activeStatus == "doublylist"){
           parentChildEdgeId = internalBstObject[key]["vertexClassNumber"]+BACK_EDGE_CONST;
@@ -1825,17 +2130,6 @@ this.insertArrTail = function(vertexTextArr){
           state["el"][parentChildEdgeId]["animateHighlighted"] = false;
       }
       //end
-
-      parentChildEdgeId = internalBstObject[key]["vertexClassNumber"];
-
-      state["el"][parentChildEdgeId] = {};
-
-      state["el"][parentChildEdgeId]["vertexA"] = internalBstObject[key]["vertexClassNumber"];
-      state["el"][parentChildEdgeId]["vertexB"] = internalBstObject[internalBstObject[key]["rightChild"]]["vertexClassNumber"];
-      state["el"][parentChildEdgeId]["type"] = EDGE_TYPE_DE;
-      state["el"][parentChildEdgeId]["weight"] = 1;
-      state["el"][parentChildEdgeId]["state"] = EDGE_DEFAULT;
-      state["el"][parentChildEdgeId]["animateHighlighted"] = false;
 
       
     }
@@ -1903,13 +2197,20 @@ this.insertArrTail = function(vertexTextArr){
   function populatePseudocode(act) {
     switch (act) {
       case 0: // Insert
-        document.getElementById('code1').innerHTML = 'Vertex prev = head';
+        document.getElementById('code1').innerHTML = 'Vertex temp1 = head';
         document.getElementById('code2').innerHTML = 'while (--k!=0)';
-        document.getElementById('code3').innerHTML = '&nbsp&nbspprev = prev.next';
-        document.getElementById('code4').innerHTML = 'Vertex temp = prev.next';
+        document.getElementById('code3').innerHTML = '&nbsp&nbspprev = temp1.next';
+        document.getElementById('code4').innerHTML = 'Vertex temp2 = temp1.next';
         document.getElementById('code5').innerHTML = 'Vertex newVertex = new Vertex(input)';
-        document.getElementById('code6').innerHTML = 'prev.next = newVertex';
-        document.getElementById('code7').innerHTML = 'newVertex.next = temp';
+         if(activeStatus == "doublylist"){
+           document.getElementById('code6').innerHTML = 'newVertex.next = temp2 , temp2.prev = newVertex';
+           document.getElementById('code7').innerHTML = 'temp1.next = newVertex , newVertex.prev = temp1';
+         }
+         else{
+          document.getElementById('code6').innerHTML = 'temp1.next = newVertex';
+          document.getElementById('code7').innerHTML = 'newVertex.next = temp2';
+         }
+        
         break;
     case 1: // insertHead
         document.getElementById('code1').innerHTML = 'Vertex temp = new Vertex(input)';
