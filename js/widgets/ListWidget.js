@@ -2053,7 +2053,7 @@ this.removeArrTailDoublyList = function(){
     //Vertex prev = head
     currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
     currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
-    currentState["status"] = "Prev points to head";
+    currentState["status"] = "temp1 points to head";
     currentState["lineNo"] = 1;
     stateList.push(currentState);
     //end
@@ -2238,6 +2238,270 @@ this.removeArrTailDoublyList = function(){
   }
 
 
+
+  this.removeArrKthDoublyList = function(vertexTextArr){
+    var stateList = [];
+    var vertexTraversed = {};
+    var edgeTraversed = {};
+    var currentVertex = internalBst["root"];
+    var currentState = createState(internalBst);
+    var currentVertexClass;
+    var key;
+    var i;
+
+
+
+    // Loop through all array values and...
+    
+    var index;
+
+      var vt = parseInt(vertexTextArr);
+      
+      // Check whether value is number
+      if(isNaN(vt)){
+        $('#remove-err').html("Please fill in a number or comma-separated array of numbers!");
+        return false;
+      }
+      if(vt>=amountVertex){
+         $('#remove-err').html("Please enter a valid index!");
+         return false;
+      }
+      if(vt<0){
+         $('#remove-err').html("Please enter a valid index!");
+         return false;
+      }
+      index = vt;
+    
+
+    if(index==0){
+      return this.removeArrHeadDoublyList();
+    }
+    if(index==amountVertex-1){
+      return this.removeArrTailDoublyList();
+    }
+
+    //Vertex prev = head
+    currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+    currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+    currentState["status"] = "Prev points to head";
+    currentState["lineNo"] = 1;
+    stateList.push(currentState);
+    //end
+  
+      var vertexCheckBf;
+     
+      // Re-initialization
+      vertexTraversed = {};
+      edgeTraversed = {};
+      currentVertex = internalBst["root"];
+      currentState = createState(internalBst);
+
+      // Find vertex
+      for(i = 0; i < index-1; i++){
+    
+      // while(true){
+        //while (--k!=0)
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        vertexTraversed[currentVertex] = true;
+        currentState["status"] = "decrement k, index specified has not been reached, " + "(k = "+ (index-1-i) +")";
+        currentState["lineNo"] = 2;
+        stateList.push(currentState); 
+        //end
+
+        //important assignment
+        parentVertex = currentVertex;
+        currentVertex = internalBst[currentVertex]["rightChild"];
+
+
+        //prev = prev.next
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        var edgeHighlighted = internalBst[parentVertex]["vertexClassNumber"];
+        edgeTraversed[edgeHighlighted] = true;
+        currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
+        currentState["el"][edgeHighlighted]["state"] = EDGE_TRAVERSED;
+        currentState["status"] = "points to the next vertex";
+        currentState["lineNo"] = 3;
+        stateList.push(currentState);
+        //end
+      }
+
+      //while (--k!=0)
+      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+      currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+      currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+      vertexTraversed[currentVertex] = true;
+      currentState["status"] = "k is 0, continue removal";
+      currentState["lineNo"] = 2;
+      stateList.push(currentState); 
+      //end
+
+      parentVertex = currentVertex;
+      currentVertex = internalBst[currentVertex]["rightChild"];
+
+      if(currentVertex != null){
+        //Vertex temp2 = temp1.next
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        
+        parentVertex = internalBst[currentVertex]["parent"];
+        parentVertexClass = internalBst[parentVertex]["vertexClassNumber"];
+        currentState["vl"][parentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+
+        var edgeHighlighted = internalBst[parentVertex]["vertexClassNumber"];
+        edgeTraversed[edgeHighlighted] = true;
+        currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
+        currentState["el"][edgeHighlighted]["state"] = EDGE_GREEN;
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_GREEN_FILL;
+        vertexTraversed[currentVertex] = true;
+        currentState["status"] = "keep track of the vertex to be deleted";
+        currentState["lineNo"] = 4;
+        stateList.push(currentState);
+        //end
+
+        //Vertex temp3 = temp2.next
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        
+        parentVertex = internalBst[currentVertex]["parent"];
+        rightChildVertex = internalBst[currentVertex]["rightChild"];
+        rightChildVertexClass = internalBst[rightChildVertex]["vertexClassNumber"];
+        parentVertexClass = internalBst[parentVertex]["vertexClassNumber"];
+        currentState["vl"][parentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+
+        var edgeHighlighted = internalBst[currentVertex]["vertexClassNumber"];
+        edgeTraversed[edgeHighlighted] = true;
+        currentState["el"][edgeHighlighted]["animateHighlighted"] = true;
+        currentState["vl"][currentVertexClass]["state"] = VERTEX_GREEN_FILL;
+        currentState["el"][edgeHighlighted]["state"] = EDGE_RED;
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_RED_FILL;
+        vertexTraversed[currentVertex] = true;
+        currentState["status"] = "keep track of the vertex, next to the vertex to be deleted";
+        currentState["lineNo"] = 5;
+        stateList.push(currentState);
+        //end
+      }
+
+      // Case 1: no child
+      if(internalBst[currentVertex]["rightChild"]==null){
+        // currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        // currentState["status"] = "vertex is the last vertex, update tail pointer";
+        // currentState["lineNo"] = 7;
+        // stateList.push(currentState);
+        // var parentVertex = internalBst[currentVertex]["parent"];
+
+        // if(parentVertex !=null) internalBst[parentVertex]["rightChild"] = null;
+        // else internalBst["root"] = null;
+
+        // currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        // delete internalBst[currentVertex];
+        // delete vertexTraversed[currentVertex];
+        // delete edgeTraversed[currentVertexClass];
+
+        // currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        // currentState["status"] = "Remove last vertex";
+        // currentState["lineNo"] = 7;
+        // stateList.push(currentState);
+        // vertexCheckBf = parentVertex;
+      }
+      else{
+
+        // has child
+     
+        // currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        //  currentState["status"] = "keep track of the vertex to be deleted";
+        // currentState["lineNo"] = 4;
+        // stateList.push(currentState);
+        var parentVertex = internalBst[currentVertex]["parent"];
+        var rightChildVertex = internalBst[currentVertex]["rightChild"];
+
+        if(parentVertex != null){
+          internalBst[parentVertex]["rightChild"] = rightChildVertex;
+        }
+        else internalBst["root"] = rightChildVertex;
+
+        internalBst[rightChildVertex]["parent"] = parentVertex;
+       
+
+
+        //temp2.next.prev = temp1
+        parentVertexClass = internalBst[parentVertex]["vertexClassNumber"];
+        currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+        rightChildVertexClass = internalBst[rightChildVertex]["vertexClassNumber"];
+        internalBst[currentVertex]["cy"] = 50 + internalBst[currentVertex]["cy"];
+  
+
+      
+
+        
+
+
+        //delete temp
+        delete internalBst[currentVertex];
+        delete vertexTraversed[currentVertex];
+        delete edgeTraversed[currentVertexClass];
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][parentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        if(parentVertex != null){
+          currentState["el"][parentVertexClass]["state"] = EDGE_HIGHLIGHTED;
+        }
+        currentState["el"][parentVertexClass]["state"] = OBJ_HIDDEN;
+        currentState["el"][parentVertexClass+BACK_EDGE_CONST]["state"] = OBJ_HIDDEN;
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_RED_FILL;
+        currentState["status"] = "Delete vertex";
+        currentState["lineNo"] = 6;
+        stateList.push(currentState);
+        //end
+
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][parentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_RED_FILL;
+        currentState["el"][parentVertexClass+BACK_EDGE_CONST]["state"] = OBJ_HIDDEN;
+        currentState["status"] = "Connect the previous vertex to the next vertex";
+        currentState["lineNo"] = 7;
+        stateList.push(currentState);
+        //end
+
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][parentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_RED_FILL;
+         currentState["el"][parentVertexClass+BACK_EDGE_CONST]["state"] = EDGE_RED;
+        currentState["status"] = "Connect the next vertex to the previous vertex";
+        currentState["lineNo"] = 7;
+        stateList.push(currentState);
+        //end
+
+
+        //relayout list
+        recalculatePosition();
+
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][parentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+        if(parentVertex != null){
+          currentState["el"][parentVertexClass]["state"] = EDGE_HIGHLIGHTED;
+        }
+        currentState["vl"][rightChildVertexClass]["state"] = VERTEX_RED_FILL;
+        currentState["status"] = "Re-layout the list";
+        currentState["lineNo"] = 0;
+        stateList.push(currentState);
+        //end relayout
+    }
+    currentState = createState(internalBst);
+    currentState["status"] = "Removal completed";
+    currentState["lineNo"] = 0;
+  
+    stateList.push(currentState);
+  
+    graphWidget.startAnimation(stateList);
+ 
+    populatePseudocode(7);
+    amountVertex--;
+    return true;
+  }
+
   function init(initArr){
     var i;
     amountVertex=0;
@@ -2377,7 +2641,6 @@ this.removeArrTailDoublyList = function(){
       }
       //end
 
-      
     }
 
     for(key in vertexTraversed){
@@ -2513,13 +2776,20 @@ this.removeArrTailDoublyList = function(){
         document.getElementById('code7').innerHTML = 'tail = prev';   
         break;
     case 7: // remove kth
-        document.getElementById('code1').innerHTML = 'Vertex prev = head';
+        document.getElementById('code1').innerHTML = 'Vertex temp1 = head';
         document.getElementById('code2').innerHTML = 'while (--k!=0)';
-        document.getElementById('code3').innerHTML = '&nbsp&nbspprev = prev.next';
-        document.getElementById('code4').innerHTML = 'Vertex temp = prev.next';
-        document.getElementById('code5').innerHTML = 'prev.next = prev.next.next';
-        document.getElementById('code6').innerHTML = 'delete temp';
-        document.getElementById('code7').innerHTML = '';
+        document.getElementById('code3').innerHTML = '&nbsp&nbsptemp1 = temp1.next';
+        document.getElementById('code4').innerHTML = 'Vertex temp2 = temp1.next';
+        if(activeStatus == "doublylist"){
+          document.getElementById('code5').innerHTML = 'temp3 = temp2.next';
+          document.getElementById('code6').innerHTML = 'delete temp2';
+          document.getElementById('code7').innerHTML = 'temp1.next = temp3 , temp3.prev = temp1';
+        }
+        else{
+          document.getElementById('code5').innerHTML = 'temp1.next = temp1.next.next';
+          document.getElementById('code6').innerHTML = 'delete temp';
+          document.getElementById('code7').innerHTML = '';
+        }
         break;
     case 8: //remove tail doubly list
         document.getElementById('code1').innerHTML = 'temp = tail';
