@@ -141,7 +141,7 @@ var BST = function(){
       return true;
   }
 
-   this.peek = function(vertexText){
+   this.peek = function(){
     var stateList = [];
     var vertexTraversed = {};
     var edgeTraversed = {};
@@ -166,6 +166,43 @@ var BST = function(){
 
     graphWidget.startAnimation(stateList);
     populatePseudocode(3);
+    return true;
+  }
+
+  this.peekBack = function(){
+    var stateList = [];
+    var vertexTraversed = {};
+    var edgeTraversed = {};
+    var currentVertex = internalBst["root"];
+    var currentState = createState(internalBst);
+    var currentVertexClass;
+    var key;
+    var index = 0;
+
+    while(true){
+      if(internalBst[currentVertex]["rightChild"]!=null) {
+        currentVertex = internalBst[currentVertex]["rightChild"];
+      }
+      else break;
+    }
+
+    currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+
+    //temp = head , index = 0
+    currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+    currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
+    currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+    currentState["status"] = "return " + currentVertex;
+    currentState["lineNo"] = 1;
+    stateList.push(currentState);
+
+    currentState = createState(internalBst);
+    currentState["status"] = "Peek is complete";
+    currentState["lineNo"] = 0;
+    stateList.push(currentState);
+
+    graphWidget.startAnimation(stateList);
+    populatePseudocode(9);
     return true;
   }
 
@@ -2237,8 +2274,6 @@ this.removeArrTailDoublyList = function(){
     return true;
   }
 
-
-
   this.removeArrKthDoublyList = function(vertexTextArr){
     var stateList = [];
     var vertexTraversed = {};
@@ -2248,29 +2283,24 @@ this.removeArrTailDoublyList = function(){
     var currentVertexClass;
     var key;
     var i;
-
-
-
     // Loop through all array values and...
-    
     var index;
-
-      var vt = parseInt(vertexTextArr);
+    var vt = parseInt(vertexTextArr);
       
-      // Check whether value is number
-      if(isNaN(vt)){
-        $('#remove-err').html("Please fill in a number or comma-separated array of numbers!");
-        return false;
-      }
-      if(vt>=amountVertex){
-         $('#remove-err').html("Please enter a valid index!");
-         return false;
-      }
-      if(vt<0){
-         $('#remove-err').html("Please enter a valid index!");
-         return false;
-      }
-      index = vt;
+    // Check whether value is number
+    if(isNaN(vt)){
+      $('#remove-err').html("Please fill in a number or comma-separated array of numbers!");
+      return false;
+    }
+    if(vt>=amountVertex){
+       $('#remove-err').html("Please enter a valid index!");
+       return false;
+    }
+    if(vt<0){
+       $('#remove-err').html("Please enter a valid index!");
+       return false;
+    }
+    index = vt;
     
 
     if(index==0){
@@ -2283,20 +2313,20 @@ this.removeArrTailDoublyList = function(){
     //Vertex prev = head
     currentVertexClass = internalBst[currentVertex]["vertexClassNumber"];
     currentState["vl"][currentVertexClass]["state"] = VERTEX_HIGHLIGHTED;
-    currentState["status"] = "Prev points to head";
+    currentState["status"] = "temp1 points to head";
     currentState["lineNo"] = 1;
     stateList.push(currentState);
     //end
   
-      var vertexCheckBf;
-     
-      // Re-initialization
-      vertexTraversed = {};
-      edgeTraversed = {};
-      currentVertex = internalBst["root"];
-      currentState = createState(internalBst);
+    var vertexCheckBf;
+   
+    // Re-initialization
+    vertexTraversed = {};
+    edgeTraversed = {};
+    currentVertex = internalBst["root"];
+    currentState = createState(internalBst);
 
-      // Find vertex
+    // Find vertex
       for(i = 0; i < index-1; i++){
     
       // while(true){
@@ -2551,7 +2581,7 @@ this.removeArrTailDoublyList = function(){
       var parentVertex = internalBst[key]["parent"];
       
       graphWidget.addEdge(internalBst[parentVertex]["vertexClassNumber"], internalBst[key]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"], EDGE_TYPE_DE, 1, true);
-      if(activeStatus=="doublylist"){
+      if((activeStatus == "doublylist")||(activeStatus == "deque")){
         graphWidget.addEdge(internalBst[key]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"], internalBst[parentVertex]["vertexClassNumber"]+BACK_EDGE_CONST, EDGE_TYPE_DE, 1, true);
       }
     }
@@ -2628,7 +2658,7 @@ this.removeArrTailDoublyList = function(){
       state["el"][parentChildEdgeId]["animateHighlighted"] = false;
 
       //add an edge for doubly linked list
-      if(activeStatus == "doublylist"){
+      if((activeStatus == "doublylist")||(activeStatus == "deque")){
           parentChildEdgeId = internalBstObject[key]["vertexClassNumber"]+BACK_EDGE_CONST;
           state["el"][parentChildEdgeId] = {};
 
@@ -2694,7 +2724,7 @@ this.removeArrTailDoublyList = function(){
         document.getElementById('code3').innerHTML = '&nbsp&nbsptemp1 = temp1.next';
         document.getElementById('code4').innerHTML = 'Vertex temp2 = temp1.next';
         document.getElementById('code5').innerHTML = 'Vertex newVertex = new Vertex(input)';
-         if(activeStatus == "doublylist"){
+        if((activeStatus == "doublylist")||(activeStatus == "deque")){
            document.getElementById('code6').innerHTML = 'newVertex.next = temp2 , temp2.prev = newVertex';
            document.getElementById('code7').innerHTML = 'temp1.next = newVertex , newVertex.prev = temp1';
          }
@@ -2707,7 +2737,7 @@ this.removeArrTailDoublyList = function(){
     case 1: // insertHead
         document.getElementById('code1').innerHTML = 'Vertex temp = new Vertex(input)';
         document.getElementById('code2').innerHTML = 'temp.next = head';
-        if(activeStatus == "doublylist"){
+        if((activeStatus == "doublylist")||(activeStatus == "deque")){
            document.getElementById('code3').innerHTML = 'temp.next.prev = temp';
            document.getElementById('code4').innerHTML = 'head = temp';
          }
@@ -2722,7 +2752,7 @@ this.removeArrTailDoublyList = function(){
     case 2: // insertTail
         document.getElementById('code1').innerHTML = 'Vertex temp = new Vertex(input)';
         document.getElementById('code2').innerHTML = 'tail.next = temp';
-        if(activeStatus == "doublylist"){
+        if((activeStatus == "doublylist")||(activeStatus == "deque")){
            document.getElementById('code3').innerHTML = 'temp.prev = tail';
            document.getElementById('code4').innerHTML = 'tail = temp';
          }
@@ -2756,7 +2786,7 @@ this.removeArrTailDoublyList = function(){
         document.getElementById('code1').innerHTML = 'temp = head';
         document.getElementById('code2').innerHTML = 'head = head.next';
         document.getElementById('code3').innerHTML = 'delete temp';
-        if(activeStatus == "doublylist"){
+        if((activeStatus == "doublylist")||(activeStatus == "deque")){
            document.getElementById('code4').innerHTML = 'head.prev = null';
          }
          else{
@@ -2780,8 +2810,8 @@ this.removeArrTailDoublyList = function(){
         document.getElementById('code2').innerHTML = 'while (--k!=0)';
         document.getElementById('code3').innerHTML = '&nbsp&nbsptemp1 = temp1.next';
         document.getElementById('code4').innerHTML = 'Vertex temp2 = temp1.next';
-        if(activeStatus == "doublylist"){
-          document.getElementById('code5').innerHTML = 'temp3 = temp2.next';
+        if((activeStatus == "doublylist")||(activeStatus == "deque")){
+          document.getElementById('code5').innerHTML = 'Vertex temp3 = temp2.next';
           document.getElementById('code6').innerHTML = 'delete temp2';
           document.getElementById('code7').innerHTML = 'temp1.next = temp3 , temp3.prev = temp1';
         }
@@ -2800,8 +2830,8 @@ this.removeArrTailDoublyList = function(){
         document.getElementById('code6').innerHTML = '';
         document.getElementById('code7').innerHTML = '';
         break;
-    case 9: 
-        document.getElementById('code1').innerHTML = '';
+    case 9: //peek back
+        document.getElementById('code1').innerHTML = 'return tail.data';
         document.getElementById('code2').innerHTML = '';
         document.getElementById('code3').innerHTML = '';
         document.getElementById('code4').innerHTML = '';
