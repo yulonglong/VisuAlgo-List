@@ -91,6 +91,11 @@
     	</div>
 
     	<div class="search action-menu-pullout">
+            <!-- peek for deque-->
+            <div id="search-peek-front" style="display:none;" class="execAction new-menu-option coloured-menu-option"  onclick=peekDeque("front")><p>Front</p></div>
+            <div id="search-peek-back" style="display:none;" class="execAction new-menu-option coloured-menu-option"  onclick=peekDeque("back")><p>Back</p></div>
+            <!-- end peek -->
+
             <div id="search-input" class="new-menu-option"><input type="text" id="v-search" title="Enter an integer" autocomplete="off" value=5 /></div>
             <div id="search-go" class="execAction coloured-menu-option" onclick=searchVertex()><p>GO</p></div>
             <div id="search-err" class="err"></div>
@@ -101,12 +106,13 @@
         	<!-- for push top-->
             <div id="pushtop-input" style="display:none;" class="new-menu-option"><input type="text" id="v-push-top-value" title="Enter an integer" autocomplete="off" value=53 /></div>
             <div id="pushtop-go" style="display:none;" class="execAction coloured-menu-option" onclick=pushTop()><p>GO</p></div>
-            <div id="pushtop-err" style="display:none;" class="err"></div>
         	<!-- for enqueue back -->
 			<div id="enqueueback-input" style="display:none;" class="new-menu-option"><input type="text" id="v-enqueue-back-value" title="Enter an integer" autocomplete="off" value=57 /></div>
             <div id="enqueueback-go" style="display:none;" class="execAction coloured-menu-option" onclick=enqueueBack()><p>GO</p></div>
-            <div id="enqueueback-err" style="display:none;" class="err"></div>
-      
+            <!-- for dequeue -->
+            <div id="insert-deque-input" style="display:none;" class="new-menu-option"><input type="text" id="v-insert-deque-value" title="Enter an integer" autocomplete="off" value=57 /></div>
+            <div id="insert-deque-front" style="display:none;" class="execAction new-menu-option coloured-menu-option"  onclick=insertDeque("front")><p>Front</p></div>
+            <div id="insert-deque-back" style="display:none;" class="execAction new-menu-option coloured-menu-option"  onclick=insertDeque("back")><p>Back</p></div>
         	<!-- initially hidden end -->
 
 
@@ -145,6 +151,12 @@
         </div>
         
         <div class="remove action-menu-pullout">
+
+            <!--dequeue for deque -->
+            <div id="remove-deque-front" style="display:none;" class="execAction new-menu-option coloured-menu-option"  onclick=removeDeque("front")><p>Front</p></div>
+            <div id="remove-deque-back" style="display:none;" class="execAction new-menu-option coloured-menu-option"  onclick=removeDeque("back")><p>Back</p></div>
+            <!-- end -->
+
        		<div id="remove-head" class="execAction new-menu-option coloured-menu-option" onClick=removeHead()><p>Remove Head</p></div>
             <div id="remove-tail" class="execAction new-menu-option coloured-menu-option" onClick=removeTail()><p>Remove Tail</p></div>
             <div id="remove-kth" class="execAction new-menu-option coloured-menu-option" onclick=removeModelingOpen("removekth")><p>Remove k-th</p>
@@ -294,7 +306,7 @@
 	$('#title-Deque').click(function() {
 		if(isPlaying) {	stop(); }
 		hideActionsPanel();
-		displayQueue();
+		displayDeque();
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
@@ -304,15 +316,19 @@
 
 
 	function displayList(){
+        document.getElementById("insert-deque-input").style.display = "none";
+        document.getElementById("insert-deque-front").style.display = "none";
+        document.getElementById("insert-deque-back").style.display = "none";
+        document.getElementById("remove-deque-front").style.display = "none";
+        document.getElementById("remove-deque-back").style.display = "none";
+        document.getElementById("search-peek-front").style.display = "none";
+        document.getElementById("search-peek-back").style.display = "none";
 		document.getElementById("enqueueback-input").style.display = "none";
 		document.getElementById("enqueueback-go").style.display = "none";
-		document.getElementById("enqueueback-err").style.display = "none";
 		document.getElementById("pushtop-input").style.display = "none";
 		document.getElementById("pushtop-go").style.display = "none";
-		document.getElementById("pushtop-err").style.display = "none";
 		document.getElementById("search-input").style.display = "";
 		document.getElementById("search-go").style.display = "";
-		document.getElementById("search-err").style.display = "";
 		document.getElementById("insert-head").style.display = "";
 		document.getElementById("insert-tail").style.display = "";
 		document.getElementById("insert-kth").style.display = "";
@@ -323,15 +339,19 @@
 	}
 
 	function displayStack(){
+        document.getElementById("insert-deque-input").style.display = "none";
+        document.getElementById("insert-deque-front").style.display = "none";
+        document.getElementById("insert-deque-back").style.display = "none";
+        document.getElementById("remove-deque-front").style.display = "none";
+        document.getElementById("remove-deque-back").style.display = "none";
+        document.getElementById("search-peek-front").style.display = "none";
+        document.getElementById("search-peek-back").style.display = "none";
 		document.getElementById("enqueueback-input").style.display = "none";
 		document.getElementById("enqueueback-go").style.display = "none";
-		document.getElementById("enqueueback-err").style.display = "none";
 		document.getElementById("pushtop-input").style.display = "";
 		document.getElementById("pushtop-go").style.display = "";
-		document.getElementById("pushtop-err").style.display = "";
 		document.getElementById("search-input").style.display = "none";
 		document.getElementById("search-go").style.display = "none";
-		document.getElementById("search-err").style.display = "none";
 		document.getElementById("insert-head").style.display = "none";
 		document.getElementById("insert-tail").style.display = "none";
 		document.getElementById("insert-kth").style.display = "none";
@@ -342,15 +362,19 @@
 	}
 
 	function displayQueue(){
+        document.getElementById("insert-deque-input").style.display = "none";
+        document.getElementById("insert-deque-front").style.display = "none";
+        document.getElementById("insert-deque-back").style.display = "none";
+        document.getElementById("remove-deque-front").style.display = "none";
+        document.getElementById("remove-deque-back").style.display = "none";
+        document.getElementById("search-peek-front").style.display = "none";
+        document.getElementById("search-peek-back").style.display = "none";
 		document.getElementById("enqueueback-input").style.display = "";
 		document.getElementById("enqueueback-go").style.display = "";
-		document.getElementById("enqueueback-err").style.display = "";
 		document.getElementById("pushtop-input").style.display = "none";
 		document.getElementById("pushtop-go").style.display = "none";
-		document.getElementById("pushtop-err").style.display = "none";
 		document.getElementById("search-input").style.display = "none";
 		document.getElementById("search-go").style.display = "none";
-		document.getElementById("search-err").style.display = "none";
 		document.getElementById("insert-head").style.display = "none";
 		document.getElementById("insert-tail").style.display = "none";
 		document.getElementById("insert-kth").style.display = "none";
@@ -359,6 +383,29 @@
 		document.getElementById("remove-kth").style.display = "none";
 		changeTextQueue();
 	}
+
+    function displayDeque(){
+        document.getElementById("insert-deque-input").style.display = "";
+        document.getElementById("insert-deque-front").style.display = "";
+        document.getElementById("insert-deque-back").style.display = "";
+        document.getElementById("remove-deque-front").style.display = "";
+        document.getElementById("remove-deque-back").style.display = "";
+        document.getElementById("search-peek-front").style.display = "";
+        document.getElementById("search-peek-back").style.display = "";
+        document.getElementById("enqueueback-input").style.display = "none";
+        document.getElementById("enqueueback-go").style.display = "none";
+        document.getElementById("pushtop-input").style.display = "none";
+        document.getElementById("pushtop-go").style.display = "none";
+        document.getElementById("search-input").style.display = "none";
+        document.getElementById("search-go").style.display = "none";
+        document.getElementById("insert-head").style.display = "none";
+        document.getElementById("insert-tail").style.display = "none";
+        document.getElementById("insert-kth").style.display = "none";
+        document.getElementById("remove-head").style.display = "none";
+        document.getElementById("remove-tail").style.display = "none";
+        document.getElementById("remove-kth").style.display = "none";
+        changeTextQueue();
+    }
 
 	function changeTextList(){
 		document.getElementById('create').innerHTML = "Create";
@@ -383,6 +430,8 @@
 
 	function searchGeneric(){
 		if(bstWidget.getActiveStatus()=="list"){
+            //do nothing
+            //open next level option
 		}
 		else if(bstWidget.getActiveStatus()=="stack"){
 			peekStack();
@@ -390,10 +439,20 @@
 		else if(bstWidget.getActiveStatus()=="queue"){
 			peekQueue();
 		}
+        else if(bstWidget.getActiveStatus()=="doublylist"){
+            //do nothing
+            //open next level option
+        }
+        else if(bstWidget.getActiveStatus()=="deque"){
+           //do nothing
+           //open next level option
+        }
 	}
 
 	function removeGeneric(){
 		if(bstWidget.getActiveStatus()=="list"){
+            //do nothing
+            //open next level option
 		}
 		else if(bstWidget.getActiveStatus()=="stack"){
 			removeHead();
@@ -401,6 +460,14 @@
 		else if(bstWidget.getActiveStatus()=="queue"){
 			removeHead();
 		}
+        else if(bstWidget.getActiveStatus()=="doublylist"){
+            //do nothing
+            //open next level option
+        }
+        else if(bstWidget.getActiveStatus()=="deque"){
+           //do nothing
+           //open next level option
+        }
 	}
 
 	function random() {
@@ -464,7 +531,7 @@
 		setTimeout( function() {
 			if((mode=="exploration")&&bstWidget.peek()) {
 				$('#current-action').show();
-				$('#current-action p').html("Peek top");
+				$('#current-action p').html("Peek Top");
 				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
 				triggerRightPanels();
 				isPlaying = true;
@@ -477,12 +544,36 @@
 		setTimeout( function() {
 			if((mode=="exploration")&&bstWidget.peek()) {
 				$('#current-action').show();
-				$('#current-action p').html("Peek front");
+				$('#current-action p').html("Peek Front");
 				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
 				triggerRightPanels();
 				isPlaying = true;
 			}
 		}, 500)
+    }
+
+    function peekDeque(location){
+       if(isPlaying) {  stop(); }
+        setTimeout( function() {
+            if(location == "front"){
+                if((mode=="exploration")&&bstWidget.peek()) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Peek Front");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+            }
+            else{
+                if((mode=="exploration")&&bstWidget.peekBack()) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Peek Back");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+            }
+        }, 500)
     }
 
     function searchVertex(){
@@ -607,6 +698,30 @@
 		}, 500)
     }
 
+ function insertDeque(location){
+       if(isPlaying) {  stop(); }
+        setTimeout( function() {
+            var input = $('#v-insert-deque-value').val();
+            if(location == "front"){
+                if((mode=="exploration")&&bstWidget.insertArrHeadDoublyList(input)) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Insert "+ input + " to Front");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }   
+            }
+            else{
+                if((mode=="exploration")&&bstWidget.insertArrTailDoublyList(input)) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Insert "+ input + " to Back");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+            }
+        }, 500)
+    }
 
 
 //another stub function created by me
@@ -685,6 +800,30 @@
     			}
             }
 		}, 500);
+    }
+
+     function removeDeque(location){
+       if(isPlaying) {  stop(); }
+        setTimeout( function() {
+            if(location == "front"){
+                if((mode=="exploration")&&bstWidget.removeArrHeadDoublyList()) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Remove Front");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+            }
+            else{
+                if((mode=="exploration")&&bstWidget.removeArrTailDoublyList()) {
+                    $('#current-action').show();
+                    $('#current-action p').html("Remove Back");
+                    $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
+                    triggerRightPanels();
+                    isPlaying = true;
+                }
+            }
+        }, 500)
     }
 
 	function createModelingOpen(modelingType)
