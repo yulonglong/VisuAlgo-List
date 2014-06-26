@@ -929,9 +929,6 @@ this.insertArrHead= function(vertexTextArr){
           return false;
         }
       }
-    
-
-   
 
       var vertexText = parseInt(vertexTextArr);
 
@@ -1021,6 +1018,17 @@ this.insertArrHead= function(vertexTextArr){
       currentState["lineNo"] = 3;
       stateList.push(currentState);
       //end
+
+      if(amountVertex==1){
+        //tail = head
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][newNodeVertexClass]["state"] = VERTEX_GREEN_FILL;
+        currentState["status"] = "Tail points to head"
+        currentState["lineNo"] = 4;
+        stateList.push(currentState);
+        //end
+      }
+
       
       recalculatePosition();
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
@@ -1224,6 +1232,9 @@ this.insertArrHeadDoublyList= function(vertexTextArr){
 
 
 this.insertArrTail = function(vertexTextArr){
+    if(amountVertex==0){
+      return this.insertArrHead(vertexTextArr);
+    }
     var stateList = [];
     var vertexTraversed = {};
     var edgeTraversed = {};
@@ -1232,10 +1243,6 @@ this.insertArrTail = function(vertexTextArr){
     var currentVertexClass;
     var key;
     var i;
-
-    if(amountVertex==0){
-      return this.insertArrHead(vertexTextArr);
-    }
 
     currentState["status"] = "The current LinkedList";
     currentState["lineNo"] = 0;
@@ -2740,12 +2747,19 @@ this.removeArrTailDoublyList = function(){
         if((activeStatus == "doublylist")||(activeStatus == "deque")){
            document.getElementById('code3').innerHTML = 'temp.next.prev = temp';
            document.getElementById('code4').innerHTML = 'head = temp';
+           document.getElementById('code5').innerHTML = '';
+         }
+         else if(amountVertex==1){
+          document.getElementById('code3').innerHTML = 'head = temp';
+          document.getElementById('code4').innerHTML = 'tail = head';
+          document.getElementById('code5').innerHTML = '';
          }
          else{
           document.getElementById('code3').innerHTML = 'head = temp';
           document.getElementById('code4').innerHTML = '';
+          document.getElementById('code5').innerHTML = '';
          }
-        document.getElementById('code5').innerHTML = '';
+        
         document.getElementById('code6').innerHTML = '';
         document.getElementById('code7').innerHTML = '';
         break;
