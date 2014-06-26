@@ -1013,7 +1013,7 @@ this.insertArrHead= function(vertexTextArr){
 
       //hed = temp
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_GREEN_FILL;
       currentState["status"] = "Head points to temp"
       currentState["lineNo"] = 3;
       stateList.push(currentState);
@@ -1022,7 +1022,7 @@ this.insertArrHead= function(vertexTextArr){
       if(amountVertex==1){
         //tail = head
         currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-        currentState["vl"][newNodeVertexClass]["state"] = VERTEX_GREEN_FILL;
+        currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
         currentState["status"] = "Tail points to head"
         currentState["lineNo"] = 4;
         stateList.push(currentState);
@@ -1174,9 +1174,19 @@ this.insertArrHeadDoublyList= function(vertexTextArr){
           currentState["lineNo"] = 2;
           stateList.push(currentState);
           //end
+
+          //if (head!=null) head.prev = temp
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["state"] = EDGE_HIGHLIGHTED;
+          currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["animateHighlighted"] = true;
+          currentState["status"] = "set prev pointer";
+          currentState["lineNo"] = 3;
+          stateList.push(currentState);
+          //end
       }
       else{
-           //Vertex temp = temp Vertex(input)
+          //Vertex temp = temp Vertex(input)
           currentState = createState(internalBst, vertexTraversed, edgeTraversed);
           currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
           currentState["status"] = "create node";
@@ -1189,25 +1199,31 @@ this.insertArrHeadDoublyList= function(vertexTextArr){
           currentState["status"] = "head is null, temp.next is null"
           currentState["lineNo"] = 2;
           stateList.push(currentState);
-      }
 
-      //temp.next.prev = temp
-      currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
-      currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["state"] = EDGE_HIGHLIGHTED;
-      currentState["el"][newNodeVertexClass+BACK_EDGE_CONST]["animateHighlighted"] = true;
-      currentState["status"] = "set prev pointer";
-      currentState["lineNo"] = 3;
-      stateList.push(currentState);
-      //end
+           //if (head!=null) head.prev = temp
+          currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+          currentState["vl"][newNodeVertexClass]["state"] = VERTEX_HIGHLIGHTED;
+          currentState["status"] = "head is null";
+          currentState["lineNo"] = 3;
+          stateList.push(currentState);
+          //end
+      }
 
       //head = temp
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
-      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
+      currentState["vl"][newNodeVertexClass]["state"] = VERTEX_GREEN_FILL;
       currentState["status"] = "Head points to temp"
       currentState["lineNo"] = 4;
       stateList.push(currentState);
       //end
+
+      if(amountVertex==1){
+        currentState = createState(internalBst, vertexTraversed, edgeTraversed);
+        currentState["vl"][newNodeVertexClass]["state"] = VERTEX_BLUE_FILL;
+        currentState["status"] = "Tail points to head"
+        currentState["lineNo"] = 5;
+        stateList.push(currentState);
+      }
       
       recalculatePosition();
       currentState = createState(internalBst, vertexTraversed, edgeTraversed);
@@ -1367,6 +1383,10 @@ this.insertArrTail = function(vertexTextArr){
   }
 
   this.insertArrTailDoublyList = function(vertexTextArr){
+    if(amountVertex==0){
+      return this.insertArrHeadDoublyList(vertexTextArr);
+    }
+
     var stateList = [];
     var vertexTraversed = {};
     var edgeTraversed = {};
@@ -1375,10 +1395,6 @@ this.insertArrTail = function(vertexTextArr){
     var currentVertexClass;
     var key;
     var i;
-
-    if(amountVertex==0){
-      return this.insertArrHead(vertexTextArr);
-    }
 
     currentState["status"] = "The current LinkedList";
     currentState["lineNo"] = 0;
@@ -2745,9 +2761,16 @@ this.removeArrTailDoublyList = function(){
         document.getElementById('code1').innerHTML = 'Vertex temp = new Vertex(input)';
         document.getElementById('code2').innerHTML = 'temp.next = head';
         if((activeStatus == "doublylist")||(activeStatus == "deque")){
-           document.getElementById('code3').innerHTML = 'temp.next.prev = temp';
-           document.getElementById('code4').innerHTML = 'head = temp';
-           document.getElementById('code5').innerHTML = '';
+           if(amountVertex==1){
+               document.getElementById('code3').innerHTML = 'if (head!=null) head.prev = temp';
+               document.getElementById('code4').innerHTML = 'head = temp';
+               document.getElementById('code5').innerHTML = 'tail = head';
+           }
+           else{
+               document.getElementById('code3').innerHTML = 'if (head!=null) head.prev = temp';
+               document.getElementById('code4').innerHTML = 'head = temp';
+               document.getElementById('code5').innerHTML = '';
+           }
          }
          else if(amountVertex==1){
           document.getElementById('code3').innerHTML = 'head = temp';
