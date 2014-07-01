@@ -262,9 +262,9 @@
 	$('#play').hide();
 
 	//this viz-specific code
-	var bstWidget = new BST();
-    var gw = bstWidget.getGraphWidget();
-    bstWidget.setActiveStatus("list");
+	var listWidget = new List();
+    var gw = listWidget.getGraphWidget();
+    listWidget.setActiveStatus("list");
 	
 	//title changing
 	$('#title-LL').click(function() {
@@ -274,7 +274,7 @@
 		displayList();
 		hideStatusPanel();
 		hideCodetracePanel();
-		bstWidget.setActiveStatus("list");
+		listWidget.setActiveStatus("list");
 	});
 	$('#title-Stack').click(function() {
 		if(isPlaying) {	stop(); }
@@ -283,7 +283,7 @@
 		displayStack();
 		hideStatusPanel();
 		hideCodetracePanel();
-		bstWidget.setActiveStatus("stack");
+		listWidget.setActiveStatus("stack");
 	});
 	$('#title-Queue').click(function() {
 		if(isPlaying) {	stop(); }
@@ -292,7 +292,7 @@
 		displayQueue();
 		hideStatusPanel();
 		hideCodetracePanel();
-		bstWidget.setActiveStatus("queue");
+		listWidget.setActiveStatus("queue");
 	});
 	$('#title-DLL').click(function() {
 		if(isPlaying) {	stop(); }
@@ -301,7 +301,7 @@
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
-        bstWidget.setActiveStatus("doublylist");
+        listWidget.setActiveStatus("doublylist");
 	});
 	$('#title-Deque').click(function() {
 		if(isPlaying) {	stop(); }
@@ -310,7 +310,7 @@
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
-        bstWidget.setActiveStatus("deque");
+        listWidget.setActiveStatus("deque");
 	});
 
 
@@ -429,42 +429,42 @@
 	}
 
 	function searchGeneric(){
-		if(bstWidget.getActiveStatus()=="list"){
+		if(listWidget.getActiveStatus()=="list"){
             //do nothing
             //open next level option
 		}
-		else if(bstWidget.getActiveStatus()=="stack"){
+		else if(listWidget.getActiveStatus()=="stack"){
 			peekStack();
 		}
-		else if(bstWidget.getActiveStatus()=="queue"){
+		else if(listWidget.getActiveStatus()=="queue"){
 			peekQueue();
 		}
-        else if(bstWidget.getActiveStatus()=="doublylist"){
+        else if(listWidget.getActiveStatus()=="doublylist"){
             //do nothing
             //open next level option
         }
-        else if(bstWidget.getActiveStatus()=="deque"){
+        else if(listWidget.getActiveStatus()=="deque"){
            //do nothing
            //open next level option
         }
 	}
 
 	function removeGeneric(){
-		if(bstWidget.getActiveStatus()=="list"){
+		if(listWidget.getActiveStatus()=="list"){
             //do nothing
             //open next level option
 		}
-		else if(bstWidget.getActiveStatus()=="stack"){
+		else if(listWidget.getActiveStatus()=="stack"){
 			removeHead();
 		}
-		else if(bstWidget.getActiveStatus()=="queue"){
+		else if(listWidget.getActiveStatus()=="queue"){
 			removeHead();
 		}
-        else if(bstWidget.getActiveStatus()=="doublylist"){
+        else if(listWidget.getActiveStatus()=="doublylist"){
             //do nothing
             //open next level option
         }
-        else if(bstWidget.getActiveStatus()=="deque"){
+        else if(listWidget.getActiveStatus()=="deque"){
            //do nothing
            //open next level option
         }
@@ -473,7 +473,7 @@
 	function random() {
 		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			if((mode=="exploration")&&bstWidget.generateRandom()) {
+			if((mode=="exploration")&&listWidget.generateRandom()) {
 				 $('#progress-bar').slider( "option", "max", 0);
 				closeCreate();
 				isPlaying = false;
@@ -486,7 +486,7 @@
 	function randomLL() {
 		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			if((mode=="exploration")&&bstWidget.generateRandomSorted()) {
+			if((mode=="exploration")&&listWidget.generateRandomSorted()) {
 				 $('#progress-bar').slider( "option", "max", 0);
 				closeCreate();
 				isPlaying = false;
@@ -501,7 +501,7 @@
 		setTimeout( function() {
 			var input = $('#v-create-size').val();
 			input = parseInt(input);
-			if((mode=="exploration")&&bstWidget.generateRandomFixedSize(input)) {
+			if((mode=="exploration")&&listWidget.generateRandomFixedSize(input)) {
 				 $('#progress-bar').slider( "option", "max", 0);
 				closeCreate();
 				isPlaying = false;
@@ -516,7 +516,7 @@
 		setTimeout( function() {
 			var input = $('#v-create-arr').val();
 			input = input.split(",");
-			if((mode=="exploration")&&bstWidget.generateUserDefined(input)) {
+			if((mode=="exploration")&&listWidget.generateUserDefined(input)) {
 				 $('#progress-bar').slider( "option", "max", 0);
 				closeCreate();
 				isPlaying = false;
@@ -529,7 +529,7 @@
 	 function peekStack(){
 		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			if((mode=="exploration")&&bstWidget.peek()) {
+			if((mode=="exploration")&&listWidget.peek()) {
 				$('#current-action').show();
 				$('#current-action p').html("Peek Top");
 				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -542,7 +542,7 @@
      function peekQueue(){
 		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-			if((mode=="exploration")&&bstWidget.peek()) {
+			if((mode=="exploration")&&listWidget.peek()) {
 				$('#current-action').show();
 				$('#current-action p').html("Peek Front");
 				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -556,7 +556,7 @@
        if(isPlaying) {  stop(); }
         setTimeout( function() {
             if(location == "front"){
-                if((mode=="exploration")&&bstWidget.peek()) {
+                if((mode=="exploration")&&listWidget.peek()) {
                     $('#current-action').show();
                     $('#current-action p').html("Peek Front");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -565,7 +565,7 @@
                 }
             }
             else{
-                if((mode=="exploration")&&bstWidget.peekBack()) {
+                if((mode=="exploration")&&listWidget.peekBack()) {
                     $('#current-action').show();
                     $('#current-action p').html("Peek Back");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -581,7 +581,7 @@
 		setTimeout( function() {
 			var input = $('#v-search').val();
 			input = parseInt(input);
-			if((mode=="exploration")&&bstWidget.search(input)) {
+			if((mode=="exploration")&&listWidget.search(input)) {
 				$('#current-action').show();
 				$('#current-action p').html("Search for "+ input);
 				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -595,7 +595,7 @@
  		if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-push-top-value').val();
-			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
+			if((mode=="exploration")&&listWidget.insertArrHead(input)) {
 				$('#current-action').show();
 				$('#current-action p').html("Insert "+ input);
 				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -609,7 +609,7 @@
     	if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-enqueue-back-value').val();
-			if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
+			if((mode=="exploration")&&listWidget.insertArrTail(input)) {
 				$('#current-action').show();
 				$('#current-action p').html("Insert "+ input);
 				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -624,8 +624,8 @@
  		if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-insert-head-value').val();
-            if(bstWidget.getActiveStatus()=="doublylist"){
-                if((mode=="exploration")&&bstWidget.insertArrHeadDoublyList(input)) {
+            if(listWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&listWidget.insertArrHeadDoublyList(input)) {
                     $('#current-action').show();
                     $('#current-action p').html("Insert "+ input);
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -634,7 +634,7 @@
                 }   
             }
             else{
-    			if((mode=="exploration")&&bstWidget.insertArrHead(input)) {
+    			if((mode=="exploration")&&listWidget.insertArrHead(input)) {
     				$('#current-action').show();
     				$('#current-action p').html("Insert "+ input);
     				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -649,8 +649,8 @@
     	if(isPlaying) {	stop(); }
 		setTimeout( function() {
 			var input = $('#v-insert-tail-value').val();
-            if(bstWidget.getActiveStatus()=="doublylist"){
-                 if((mode=="exploration")&&bstWidget.insertArrTailDoublyList(input)) {
+            if(listWidget.getActiveStatus()=="doublylist"){
+                 if((mode=="exploration")&&listWidget.insertArrTailDoublyList(input)) {
                     $('#current-action').show();
                     $('#current-action p').html("Insert "+ input);
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -659,7 +659,7 @@
                 }
             }
             else{
-                if((mode=="exploration")&&bstWidget.insertArrTail(input)) {
+                if((mode=="exploration")&&listWidget.insertArrTail(input)) {
                     $('#current-action').show();
                     $('#current-action p').html("Insert "+ input);
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -677,8 +677,8 @@
 			var input = $('#v-insert-kth-value').val();
 			var index = $('#v-insert-kth').val();
 			//input = input.split(",");
-             if(bstWidget.getActiveStatus()=="doublylist"){
-                if((mode=="exploration")&&bstWidget.insertArrKthDoublyList(input,index)) {
+             if(listWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&listWidget.insertArrKthDoublyList(input,index)) {
                     $('#current-action').show();
                     $('#current-action p').html("Insert "+ input);
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -687,7 +687,7 @@
                 }
              }
              else{
-    			if((mode=="exploration")&&bstWidget.insertArrKth(input,index)) {
+    			if((mode=="exploration")&&listWidget.insertArrKth(input,index)) {
     				$('#current-action').show();
     				$('#current-action p').html("Insert "+ input);
     				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -703,7 +703,7 @@
         setTimeout( function() {
             var input = $('#v-insert-deque-value').val();
             if(location == "front"){
-                if((mode=="exploration")&&bstWidget.insertArrHeadDoublyList(input)) {
+                if((mode=="exploration")&&listWidget.insertArrHeadDoublyList(input)) {
                     $('#current-action').show();
                     $('#current-action p').html("Insert "+ input + " to Front");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -712,7 +712,7 @@
                 }   
             }
             else{
-                if((mode=="exploration")&&bstWidget.insertArrTailDoublyList(input)) {
+                if((mode=="exploration")&&listWidget.insertArrTailDoublyList(input)) {
                     $('#current-action').show();
                     $('#current-action p').html("Insert "+ input + " to Back");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -728,8 +728,8 @@
 	function removeHead(){
 		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-            if(bstWidget.getActiveStatus()=="doublylist"){
-                if((mode=="exploration")&&bstWidget.removeArrHeadDoublyList()) {
+            if(listWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&listWidget.removeArrHeadDoublyList()) {
                     $('#current-action').show();
                     $('#current-action p').html("Remove head");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -738,7 +738,7 @@
                 }
             }
             else{
-    			if((mode=="exploration")&&bstWidget.removeArrHead()) {
+    			if((mode=="exploration")&&listWidget.removeArrHead()) {
     				$('#current-action').show();
     				$('#current-action p').html("Remove head");
     				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -754,8 +754,8 @@
     function removeTail(){
 		if(isPlaying) {	stop(); }
 		setTimeout( function() {
-             if(bstWidget.getActiveStatus()=="doublylist"){
-                if((mode=="exploration")&&bstWidget.removeArrTailDoublyList()) {
+             if(listWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&listWidget.removeArrTailDoublyList()) {
                     $('#current-action').show();
                     $('#current-action p').html("Remove Tail");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -764,7 +764,7 @@
                 }
              }
              else{
-                if((mode=="exploration")&&bstWidget.removeArrTail()) {
+                if((mode=="exploration")&&listWidget.removeArrTail()) {
                     $('#current-action').show();
                     $('#current-action p').html("Remove Tail");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -781,8 +781,8 @@
 		setTimeout( function() {
 			var input = $('#v-remove-kth').val();
 			//input = input.split(",");
-             if(bstWidget.getActiveStatus()=="doublylist"){
-                if((mode=="exploration")&&bstWidget.removeArrKthDoublyList(input)) {
+             if(listWidget.getActiveStatus()=="doublylist"){
+                if((mode=="exploration")&&listWidget.removeArrKthDoublyList(input)) {
                     $('#current-action').show();
                     $('#current-action p').html("Remove "+ input);
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -791,7 +791,7 @@
                 }
              }
              else{
-    			if((mode=="exploration")&&bstWidget.removeArrKth(input)) {
+    			if((mode=="exploration")&&listWidget.removeArrKth(input)) {
     				$('#current-action').show();
     				$('#current-action p').html("Remove "+ input);
     				$('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -806,7 +806,7 @@
        if(isPlaying) {  stop(); }
         setTimeout( function() {
             if(location == "front"){
-                if((mode=="exploration")&&bstWidget.removeArrHeadDoublyList()) {
+                if((mode=="exploration")&&listWidget.removeArrHeadDoublyList()) {
                     $('#current-action').show();
                     $('#current-action p').html("Remove Front");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
@@ -815,7 +815,7 @@
                 }
             }
             else{
-                if((mode=="exploration")&&bstWidget.removeArrTailDoublyList()) {
+                if((mode=="exploration")&&listWidget.removeArrTailDoublyList()) {
                     $('#current-action').show();
                     $('#current-action p').html("Remove Back");
                     $('#progress-bar').slider( "option", "max", gw.getTotalIteration()-1);
