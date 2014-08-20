@@ -1,6 +1,6 @@
-// @author  Ivan Reinaldo
+// @author Steven Kester Yuwono
 // Defines a List object; keeps implementation of List internally and interact with GraphWidget to display List visualizations
-// Also includes AVL tree
+// Also includes Stack, Queue, Doubly List, and Double-Ended Queue
 var BACK_EDGE_CONST = 5000;
 
 var List = function(){
