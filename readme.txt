@@ -1,8 +1,33 @@
+---VisuAlgo---
+
+visualising data structures and algorithms through animation
+
 Main VisuAlgo website: http://www.comp.nus.edu.sg/~stevenha/visualization/
 
+VisuAlgo currently contains the following data structures and algorithms:
+-Sorting
+-Bitmask
+-Linked List, Stack, Queue, Doubly List, Deque
+-Binary Search Tree, AVL Tree
+-Binary Heap
+-Graph Data Structures
+-Union-Find Disjoint Sets
+-Segment Tree
+-Binary Indexed Tree (Fenwick Tree)
+-Generic Recursion Tree/DAG
+-Graph Traversal
+-Minimum Spanning Tree
+-Single-Source Shortest Paths
+-Network Flow
+-Graph Matching
+-Suffix Tree
+-Suffix Array
+-(Computational) Geometry
 
-About VisuAlgo
 
+
+
+---About VisuAlgo---
 
 Motivation
 
