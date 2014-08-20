@@ -214,15 +214,15 @@
 
 <!--tutorial dialogs here-->
 <div id="list-tutorial-1" class="tutorial-dialog">
-	 a linked list is a data structure consisting of a group of nodes which together represent a sequence. Under the simplest form, each node is composed of a data and a reference (in other words, a link) to the next node in the sequence
+	 Linked list is a data structure consisting of a group of nodes which together represent a sequence. Under the simplest form, each node is composed of a data and a reference (in other words, a link) to the next node in the sequence.
     <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
 </div>
 <div id="list-tutorial-2" class="tutorial-dialog">
-	To toggle between the Linked List, Stack and Queue, select the respective header.
+	To toggle between the Linked List, Stack, Queue, Doubly Linked List, and Deque, select the respective header.
     <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
 </div>
 <div id="list-tutorial-3" class="tutorial-dialog">
-	All available operations on the Linked List will be shown here. Select an action and provide the necessary input, and the action will be animated in the visualisation area.
+	All available operations will be shown here. Select an action and provide the necessary input, and the action will be animated in the visualisation area.
     <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
 </div>
 <div id="list-tutorial-4" class="tutorial-dialog">
@@ -408,6 +408,7 @@
     }
 
 	function changeTextList(){
+        document.getElementById('list-tutorial-1').innerHTML = "Linked list is a data structure consisting of a group of nodes which together represent a sequence. Under the simplest form, each node is composed of a data and a reference (in other words, a link) to the next node in the sequence. <div class=\"tutorial-next\">Next<img src=\"img/arrow_white_right.png\"/></div>";
 		document.getElementById('create').innerHTML = "Create";
 		document.getElementById('search').innerHTML = "Search";
 		document.getElementById('insert').innerHTML = "Insert";
@@ -415,6 +416,7 @@
 	}
 
 	function changeTextStack(){
+        document.getElementById('list-tutorial-1').innerHTML = "Stack is a particular kind of abstract data type or collection in which the principal (or only) operations on the collection are the addition of an entity to the collection, known as push and removal of an entity, known as pop. It is known as a Last-In-First-Out (LIFO) data structure.  <div class=\"tutorial-next\">Next<img src=\"img/arrow_white_right.png\"/></div>";
 		document.getElementById('create').innerHTML = "Create";
 		document.getElementById('search').innerHTML = "Peek";
 		document.getElementById('insert').innerHTML = "Push";
@@ -422,6 +424,7 @@
 	}
 
 	function changeTextQueue(){
+        document.getElementById('list-tutorial-1').innerHTML = "Queue is a particular kind of abstract data type or collection in which the entities in the collection are kept in order and the principal (or only) operations on the collection are the addition of entities to the rear terminal position, known as enqueue, and removal of entities from the front terminal position, known as dequeue. It is known as a First-In-First-Out (FIFO) data structure. ";
 		document.getElementById('create').innerHTML = "Create";
 		document.getElementById('search').innerHTML = "Peek";
 		document.getElementById('insert').innerHTML = "Enqueue";
