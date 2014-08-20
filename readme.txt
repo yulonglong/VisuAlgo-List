@@ -1,8 +1,12 @@
 ---VisuAlgo---
 
-visualising data structures and algorithms through animation
+Visualising data structures and algorithms through animation.
 
 Main VisuAlgo website: http://www.comp.nus.edu.sg/~stevenha/visualization/
+
+I (Steven Kester Yuwono) developed a portion of the project, namely the List data structure.
+-http://www.comp.nus.edu.sg/~stevenha/visualization/list.html
+-It includes Linked List, Stack, Queue, Doubly Linked List, and Double-Ended Queue
 
 VisuAlgo currently contains the following data structures and algorithms:
 -Sorting
@@ -23,7 +27,6 @@ VisuAlgo currently contains the following data structures and algorithms:
 -Suffix Tree
 -Suffix Array
 -(Computational) Geometry
-
 
 
 
