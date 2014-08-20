@@ -214,7 +214,7 @@
 
 <!--tutorial dialogs here-->
 <div id="list-tutorial-1" class="tutorial-dialog">
-	 Linked list is a data structure consisting of a group of nodes which together represent a sequence. Under the simplest form, each node is composed of a data and a reference (in other words, a link) to the next node in the sequence.
+    <span id="list-tutorial-1-text">Linked list is a data structure consisting of a group of vertices which together represent a sequence. Under the simplest form, each vertex is composed of a data and a reference (in other words, a link) to the next vertex in the sequence. </span>
     <div class="tutorial-next">Next<img src="img/arrow_white_right.png"/></div>
 </div>
 <div id="list-tutorial-2" class="tutorial-dialog">
@@ -272,6 +272,7 @@
 		hideEntireActionsPanel();
 		showActionsPanel();
 		displayList();
+        changeTextList();
 		hideStatusPanel();
 		hideCodetracePanel();
 		listWidget.setActiveStatus("list");
@@ -281,6 +282,7 @@
 		hideEntireActionsPanel();
 		showActionsPanel();
 		displayStack();
+        changeTextStack();
 		hideStatusPanel();
 		hideCodetracePanel();
 		listWidget.setActiveStatus("stack");
@@ -290,14 +292,16 @@
 		hideEntireActionsPanel();
 		showActionsPanel();
 		displayQueue();
+        changeTextQueue();
 		hideStatusPanel();
 		hideCodetracePanel();
 		listWidget.setActiveStatus("queue");
 	});
 	$('#title-DLL').click(function() {
 		if(isPlaying) {	stop(); }
-		hideActionsPanel();
+		hideEntireActionsPanel();
 		displayList();
+        changeTextDoublyList();
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
@@ -305,8 +309,9 @@
 	});
 	$('#title-Deque').click(function() {
 		if(isPlaying) {	stop(); }
-		hideActionsPanel();
+		hideEntireActionsPanel();
 		displayDeque();
+        changeTextDeque();
 		showActionsPanel();
 		hideStatusPanel();
 		hideCodetracePanel();
@@ -335,7 +340,6 @@
 		document.getElementById("remove-head").style.display = "";
 		document.getElementById("remove-tail").style.display = "";
 		document.getElementById("remove-kth").style.display = "";
-		changeTextList();
 	}
 
 	function displayStack(){
@@ -358,7 +362,6 @@
 		document.getElementById("remove-head").style.display = "none";
 		document.getElementById("remove-tail").style.display = "none";
 		document.getElementById("remove-kth").style.display = "none";
-		changeTextStack();
 	}
 
 	function displayQueue(){
@@ -380,8 +383,7 @@
 		document.getElementById("insert-kth").style.display = "none";
 		document.getElementById("remove-head").style.display = "none";
 		document.getElementById("remove-tail").style.display = "none";
-		document.getElementById("remove-kth").style.display = "none";
-		changeTextQueue();
+		document.getElementById("remove-kth").style.display = "none";		
 	}
 
     function displayDeque(){
@@ -404,11 +406,10 @@
         document.getElementById("remove-head").style.display = "none";
         document.getElementById("remove-tail").style.display = "none";
         document.getElementById("remove-kth").style.display = "none";
-        changeTextQueue();
     }
 
 	function changeTextList(){
-        document.getElementById('list-tutorial-1').innerHTML = "Linked list is a data structure consisting of a group of nodes which together represent a sequence. Under the simplest form, each node is composed of a data and a reference (in other words, a link) to the next node in the sequence. <div class=\"tutorial-next\">Next<img src=\"img/arrow_white_right.png\"/></div>";
+        document.getElementById('list-tutorial-1-text').innerHTML = "Linked list is a data structure consisting of a group of vertices which together represent a sequence. Under the simplest form, each vertex is composed of a data and a reference (in other words, a link) to the next vertex in the sequence.";
 		document.getElementById('create').innerHTML = "Create";
 		document.getElementById('search').innerHTML = "Search";
 		document.getElementById('insert').innerHTML = "Insert";
@@ -416,7 +417,7 @@
 	}
 
 	function changeTextStack(){
-        document.getElementById('list-tutorial-1').innerHTML = "Stack is a particular kind of abstract data type or collection in which the principal (or only) operations on the collection are the addition of an entity to the collection, known as push and removal of an entity, known as pop. It is known as a Last-In-First-Out (LIFO) data structure.  <div class=\"tutorial-next\">Next<img src=\"img/arrow_white_right.png\"/></div>";
+         document.getElementById('list-tutorial-1-text').innerHTML = "Stack is a particular kind of abstract data type or collection in which the principal (or only) operations on the collection are the addition of an entity to the collection, known as push and removal of an entity, known as pop. It is known as  Last-In-First-Out (LIFO) data structure.";
 		document.getElementById('create').innerHTML = "Create";
 		document.getElementById('search').innerHTML = "Peek";
 		document.getElementById('insert').innerHTML = "Push";
@@ -424,12 +425,28 @@
 	}
 
 	function changeTextQueue(){
-        document.getElementById('list-tutorial-1').innerHTML = "Queue is a particular kind of abstract data type or collection in which the entities in the collection are kept in order and the principal (or only) operations on the collection are the addition of entities to the rear terminal position, known as enqueue, and removal of entities from the front terminal position, known as dequeue. It is known as a First-In-First-Out (FIFO) data structure. ";
+        document.getElementById('list-tutorial-1-text').innerHTML = "Queue is a particular kind of abstract data type or collection in which the entities in the collection are kept in order and the principal (or only) operations on the collection are the addition of entities to the rear terminal position, known as enqueue, and removal of entities from the front terminal position, known as dequeue. It is known as First-In-First-Out (FIFO) data structure.";
 		document.getElementById('create').innerHTML = "Create";
 		document.getElementById('search').innerHTML = "Peek";
 		document.getElementById('insert').innerHTML = "Enqueue";
 		document.getElementById('remove').innerHTML = "Dequeue";
 	}
+
+    function changeTextDoublyList(){
+        document.getElementById('list-tutorial-1-text').innerHTML = "Doubly-linked list is a linked data structure that consists of a set of sequentially linked records called vertices. Each vertex contains two fields, called links, that are references to the previous and to the next vertex in the sequence of vertices.";
+        document.getElementById('create').innerHTML = "Create";
+        document.getElementById('search').innerHTML = "Search";
+        document.getElementById('insert').innerHTML = "Insert";
+        document.getElementById('remove').innerHTML = "Remove";
+    }
+
+    function changeTextDeque(){
+        document.getElementById('list-tutorial-1-text').innerHTML = "Double-ended queue (dequeue, often abbreviated to deque, pronounced deck) is an abstract data type that generalizes a queue, for which elements can be added to or removed from either the front (head) or back (tail).";
+        document.getElementById('create').innerHTML = "Create";
+        document.getElementById('search').innerHTML = "Peek";
+        document.getElementById('insert').innerHTML = "Enqueue";
+        document.getElementById('remove').innerHTML = "Dequeue";
+    }
 
 	function searchGeneric(){
 		if(listWidget.getActiveStatus()=="list"){
