@@ -5,7 +5,7 @@ Visualising data structures and algorithms through animation.
 [http://visualgo.net](http://visualgo.net)
 
 Developed a portion of the project, List data structure visualization.
-[http://visualgo.net/list.html](http://visualgo.net/list.html)  
+[http://visualgo.net/list](http://visualgo.net/list)
 It includes Linked List, Stack, Queue, Doubly Linked List, and Double-Ended Queue
 
 VisuAlgo currently contains the following data structures and algorithms:
